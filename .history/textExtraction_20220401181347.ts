@@ -19,7 +19,7 @@ function extractPdfText(filePath:string, options?:PDFExtractOptions) {
                 page.content.forEach( (data,i) => {
                     // only trademarks are having height of 23.94
                     if (data.height == 23.94){
-                         trademark = data.str
+                         trademark = data.str.toUpperCase()
                         
                     }
                     else{
@@ -28,15 +28,11 @@ function extractPdfText(filePath:string, options?:PDFExtractOptions) {
                 })
                 if (trademark) {
                     const tmClass  = details.splice(0,3)[2]
-
-                    
-                    
                     content.push({
                         "page_no":page.pageInfo.num,
                         trademark,
                         details:details.join(' '),
-                        // 'application_no':Number(applicationNo),
-                        // 'application_date':applicationDate,
+                        
                         'tm_class':tmClass
                     })
                     
@@ -56,4 +52,10 @@ const addTrademark = async (filePath) => {
     await closeConnection()
 }
 
+const getTrademarks =  async () => {
+    const tms = await db.select('trademark').from('tm_detail')
+    console.log(tms)
+}
 addTrademark('trademark_gazette.pdf')
+
+
