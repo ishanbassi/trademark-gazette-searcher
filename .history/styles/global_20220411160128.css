@@ -1,0 +1,34 @@
+.tm-table {
+    table-layout: fixed;
+    width:100%;  
+    text-align: center;  
+
+}
+.tm-table tr{
+    max-height:3rem; 
+    height: 3rem;
+    vertical-align: middle;
+    
+}
+
+.tm-no-col{
+    width:5%
+}
+.tm-col{
+    width:20%;
+    font-weight: 600;
+}
+.tm-details-col{
+    width:50%;
+    
+}
+.tm-class-col{
+    width:10%
+}
+.tm-pdf-col{
+    width:10%
+}
+.tm-table td>div {
+    overflow:auto;
+    height:4rem;    
+}

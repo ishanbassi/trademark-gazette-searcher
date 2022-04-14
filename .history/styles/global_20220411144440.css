@@ -1,0 +1,32 @@
+.tm-table {
+    table-layout: fixed;
+    width:100%;  
+    text-align: center;  
+
+}
+.tm-table tr{
+    height:4rem; 
+    vertical-align: middle;
+}
+
+.tm-no-col{
+    width:5%
+}
+.tm-col{
+    width:20%
+}
+.tm-details-col{
+    width:50%;
+    vertical-align:top;
+}
+.tm-class-col{
+    width:10%
+}
+.tm-pdf-col{
+    width:10%
+}
+.tm-table td {
+    text-overflow:ellipsis;
+    height: 20px;
+    overflow: hidden;
+}

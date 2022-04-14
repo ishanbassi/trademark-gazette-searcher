@@ -1,0 +1,25 @@
+.tm-table {
+    table-layout: fixed;
+    width:100%;
+    
+}
+.tm-no-col{
+    width:10%
+}
+.tm-col{
+    width:20%
+}
+.tm-details-col{
+    width:50%
+}
+.tm-class-col{
+    width:10%
+}
+.tm-pdf-col{
+    width:20%
+}
+.tm-table td {
+    text-overflow:ellipsis;
+    height:5rem;
+    overflow:hidden;
+}

@@ -1,0 +1,1 @@
+const   linda =  "natural.DoubleMetaphone";
