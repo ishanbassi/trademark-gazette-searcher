@@ -1,0 +1,43 @@
+.tm-table {
+    table-layout: fixed;
+    width:100%;  
+    text-align: center;  
+}
+.tm-table tr{
+    max-height:4rem; 
+    height: 4rem;
+    vertical-align: middle;
+    font-weight: 600;
+    
+}
+
+.tm-no-col{
+    width:5%;
+}
+.tm-col{
+    width:15%;
+}
+.tm-regTm-col{
+    width: 15%;
+}
+.tm-details-col{
+    width:50%;
+    
+}
+.tm-class-col{
+    width:10%
+}
+.tm-pdf-col{
+    width:5%
+    
+}
+.tm-table td>div {
+    overflow:auto;
+    height:5rem;
+      
+}
+.drag-and-drop-box{
+    height:5rem;
+    max-width:50rem;
+    width: 50rem;
+}
