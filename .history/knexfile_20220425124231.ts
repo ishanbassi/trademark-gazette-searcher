@@ -15,12 +15,12 @@ module.exports = {
         client: "pg",
         connection: 
         {
-            server:process.env.PG_SERVER,
-            host : process.env.PG_HOST,
-            database : process.env.PG_DATABASE,
-            user : process.env.PG_USER,
-            port : process.env.PG_PORT,
-            password :process.env.PG_PASSWORD
+            server:"trademark-searcher",
+            host : "ec2-3-229-252-6.compute-1.amazonaws.com",
+            databasea : "d4k13ihf47c8t5",
+            user : "jtbzrbhssfaodq",
+            port : 5432,
+            password :  "7dc44b67f3c46488f7cd94f9595c31f0b3df38142c1aee4a0f1000805ec4e90c"
         }
     }
     
