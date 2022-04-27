@@ -37,10 +37,7 @@ export async function seed(knex: Knex): Promise<void> {
         for await (let   pdf of pdfIterator ) {
             const trademarks = await extractPdfText(pdf)
             
-            if(trademarks.length > 0){
-                if(process.env.NODE_ENV == "production")await knex('tm_details').insert(trademarks)
-                else{await knex('tm_detail').insert(trademarks)}
-            } 
+            if(trademarks.length > 0) await knex('tm_detail').insert(trademarks)
 
         }
             
