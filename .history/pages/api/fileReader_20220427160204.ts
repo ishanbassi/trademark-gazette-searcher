@@ -12,7 +12,6 @@ export default async function handler(req:NextApiRequest, res:NextApiResponse) {
         
         const tms:TmInterface[] = JSON.parse(req.body)
         const table = process.env.NODE_ENV == 'production' ? 'tm_details' : 'tm_detail'
-        
         const result =  await  fullTmSearch(tms, table)
         
         res.send(result)
