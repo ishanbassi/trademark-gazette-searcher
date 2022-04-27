@@ -12,7 +12,7 @@ interface TmSearchResInterface extends TmDataInterface{
 const  App:FunctionComponent  = (props) =>  {
     const [searchRes,   setSearchRes] = useState<TmSearchResInterface[]>()
     const [loading ,setLoading ] = useState(false)
-    console.log(searchRes)
+    
     // FileUploader component only gives file as an argument instead  on an element
     const fileUpload =   async (xlsFile:File) => {
         setLoading(true)

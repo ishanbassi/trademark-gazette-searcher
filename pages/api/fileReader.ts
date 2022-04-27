@@ -7,11 +7,9 @@ export interface TmInterface{
     trademark:string
 }
 export default async function handler(req:NextApiRequest, res:NextApiResponse) {
-    if(req.method === "GET") {
-        res.send('hi')
-    }
+    
     if(req.method === 'POST') {
-        console.log('hii from post ')
+        
         const tms:TmInterface[] = JSON.parse(req.body)
         const table = process.env.NODE_ENV == 'production' ? 'tm_details' : 'tm_detail'
         
