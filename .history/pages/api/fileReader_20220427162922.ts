@@ -11,12 +11,12 @@ export default async function handler(req:NextApiRequest, res:NextApiResponse) {
         res.send('hi')
     }
     if(req.method === 'POST') {
-        console.log('hii from post ')
+        
         const tms:TmInterface[] = JSON.parse(req.body)
         const table = process.env.NODE_ENV == 'production' ? 'tm_details' : 'tm_detail'
         
         const result =  await  fullTmSearch(tms, table)
-        
+        console.log("hiii")
         res.send(result)
     }
 }
