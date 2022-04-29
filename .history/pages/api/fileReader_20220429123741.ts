@@ -15,6 +15,6 @@ export default async function handler(req:NextApiRequest, res:NextApiResponse) {
         
         const result =  await  fullTmSearch(tms, table)
         
-        res.send(result)
+        res.status(200).send(result)
     }
 }

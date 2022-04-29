@@ -1,7 +1,7 @@
 export{}
 require('dotenv').config()
 require('ts-node/register')
-
+console.log(process.env)
 module.exports = {
     development:{
         client: 'pg',
@@ -13,5 +13,6 @@ module.exports = {
         database : process.env.DEV_PG_DATABASE
         }    
     },
+    
     
   }

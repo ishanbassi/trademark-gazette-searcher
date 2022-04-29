@@ -32,10 +32,10 @@ const  App:FunctionComponent  = (props) =>  {
               
         })  
         
-        const result =  await fetch('/api/fileReader', {method:'POST', body:JSON.stringify(tmClassArr)})
+        const result =  await fetch('api/fileReader', {method:'POST', body:JSON.stringify(tmClassArr)})
         .then(res => res.json())
         .catch(err => <div>{err}</div>)
-        setSearchRes(result)
+        console.log(result)
         setLoading(false)
         
     }   

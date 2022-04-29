@@ -13,5 +13,16 @@ module.exports = {
         database : process.env.DEV_PG_DATABASE
         }    
     },
+    production:{
+        client: "pg",
+        connection: 
+        {
+            connectionString: process.env.DATABASE_URL,
+            ssl: {
+                require:true,
+                rejectUnauthorized: false
+            }
+        }
+    }
     
   }
