@@ -8,7 +8,7 @@ export default async function handler(req:NextApiRequest, res:NextApiResponse) {
         const tms:TmInterface[] = JSON.parse(req.body)
         
         
-        const result =  await  exactMatch(tms[6].trademark, 'tm_details')
+        const result =  await  exactMatch('jai maa', 'tm_details')
         
         res.send(result)
     }
