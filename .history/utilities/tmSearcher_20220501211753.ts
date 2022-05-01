@@ -26,21 +26,22 @@ export async function phoneticSearch(keyword, table) {
 
 // a function to perform exact match, phonetic search and containWords search
 export async  function fullTmSearch(tmArray:TmInterface[], table) {
-    console.log(tmArray,table)
+    
     const searchResult = await Promise.all(tmArray.map(async tm => {
         const tmPhonetics = Metaphone.process(tm.trademark)
         const wordsList = tm.trademark.split(' ')
-        
+        console.log('hi')
         const result = db(table).select(['page_no', 'details', 'tm_class', 'trademark', db.raw(`? as regTm`, tm.trademark)])
         .where('trademark', tm.trademark)
         .orWhereILike('trademark', `%${tm}%`)
         .orWhereIn('trademark' , wordsList)
         .orWhere('tm_phonetics', tmPhonetics)
-        console.log(result)
+        
         
         return result
     }))
-
+    await closeConnection()
+    
     return searchResult.reduce((prevArr, currArr) => prevArr.concat(currArr))
     
 }

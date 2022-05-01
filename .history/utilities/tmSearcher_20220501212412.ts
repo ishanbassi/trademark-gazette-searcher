@@ -36,11 +36,11 @@ export async  function fullTmSearch(tmArray:TmInterface[], table) {
         .orWhereILike('trademark', `%${tm}%`)
         .orWhereIn('trademark' , wordsList)
         .orWhere('tm_phonetics', tmPhonetics)
-        console.log(result)
+        
         
         return result
     }))
-
+    console.log('hi')
     return searchResult.reduce((prevArr, currArr) => prevArr.concat(currArr))
     
 }
