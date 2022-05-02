@@ -33,14 +33,14 @@ export async  function fullTmSearch(tmArray:TmInterface[], table) {
         
         const result = db(table).select(['page_no', 'details', 'tm_class', 'trademark', db.raw(`? as regTm`, tm.trademark)])
         .where('trademark', tm.trademark)
-        .orWhereILike('trademark', `%${tm}%`)
+        
         .orWhereIn('trademark' , wordsList)
         .orWhere('tm_phonetics', tmPhonetics)
 
         
         return result
     }))
-    
+    await closeConnection()
     return searchResult.reduce((prevArr, currArr) => prevArr.concat(currArr))
     
 }

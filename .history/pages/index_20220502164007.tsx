@@ -25,21 +25,20 @@ const  App:FunctionComponent  = (props) =>  {
         
         const alphabets = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
         const tmCellRegExp = /^trade\s?marks?/
-        const tmCell = {}
+        const tmAndClassCell = {}
 
         alphabets.split('').forEach(alphabet => {
             const cellValue:string =  sheetData[`${alphabet}1`].w.toLowerCase()
-            if(tmCellRegExp.test(cellValue)) tmCell['tm'] = alphabet
-            else if(cellValue === 'class') tmCell['class'] = alphabet
+            if(tmCellRegExp.test(cellValue)) tmAndClassCell['tm'] = alphabet
+            else if(cellValue === 'class') tmAndClassCell['class'] = alphabet
         })
-        if(tmCell['tm'] && tmCell['class']) {
+        if(tmAndClassCell['tm'] && tmAndClassCell['class']) {
             
             for(let i=0;i< cells ; i++) {
-                if(sheetData[`${tmCell['tm']}${i+1}`] && sheetData[`${tmCell['class']}${i+1}`])
                 tmClassArr.push(
                     {
-                        'trademark':sheetData[`${tmCell['tm']}${i+1}`]?.w,
-                        'tmClass':sheetData[`${tmCell['class']}${i+1}`]?.w
+                        'trademark':sheetData[`${tmAndClassCell['tm']}${i+1}`]?.w,
+                        'tmClass':sheetData[`${tmAndClassCell['class']}${i+1}`]?.w
                     }
                 )
             }
@@ -47,10 +46,10 @@ const  App:FunctionComponent  = (props) =>  {
         
         
         
-        const result =  await fetch('/api/fileReader', {method:'POST', body:JSON.stringify(tmClassArr)})
-        .then(res => res.json())
-        .catch(err => <div>{err}</div>)
-        setSearchRes(result)
+        // const result =  await fetch('/api/fileReader', {method:'POST', body:JSON.stringify(tmClassArr)})
+        // .then(res => res.json())
+        // .catch(err => <div>{err}</div>)
+        // setSearchRes(result)
         setLoading(false)
         
     }   

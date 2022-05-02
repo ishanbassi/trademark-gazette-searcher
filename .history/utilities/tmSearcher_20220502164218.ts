@@ -26,7 +26,7 @@ export async function phoneticSearch(keyword, table) {
 
 // a function to perform exact match, phonetic search and containWords search
 export async  function fullTmSearch(tmArray:TmInterface[], table) {
-    
+    console.log(tmArray)
     const searchResult = await Promise.all(tmArray.map(async tm => {
         const tmPhonetics = Metaphone.process(tm.trademark)
         const wordsList = tm.trademark.split(' ')
