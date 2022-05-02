@@ -40,7 +40,7 @@ export async  function fullTmSearch(tmArray:TmInterface[], table) {
         
         return result
     }))
-    await closeConnection()
+    
     return searchResult.reduce((prevArr, currArr) => prevArr.concat(currArr))
     
 }

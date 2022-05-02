@@ -17,20 +17,20 @@ const  App:FunctionComponent  = (props) =>  {
     const fileUpload =   async (xlsFile:File) => {
         setLoading(true)
         const file = read(await xlsFile.arrayBuffer())
-        const sheetData = file.Sheets
+        const sheetData = file.Sheets['Original']
         const tmClassArr = []
         console.log(sheetData)
-        // Object.entries(sheetData).forEach((pair) => {
-        //     const trademark = {}
-        //     if(pair[0].startsWith('E')) {
-        //         const [ , colNum] = pair[0].split('E')
-        //         trademark['tmClass']= sheetData[`D${colNum}`].w
-        //         trademark['trademark'] = pair[1].w
-        //         tmClassArr.push(trademark)
+        Object.entries(sheetData).forEach((pair) => {
+            const trademark = {}
+            if(pair[0].startsWith('E')) {
+                const [ , colNum] = pair[0].split('E')
+                trademark['tmClass']= sheetData[`D${colNum}`].w
+                trademark['trademark'] = pair[1].w
+                tmClassArr.push(trademark)
     
-        //     }
+            }
               
-        // })  
+        })  
         
         // const result =  await fetch('/api/fileReader', {method:'POST', body:JSON.stringify(tmClassArr)})
         // .then(res => res.json())
