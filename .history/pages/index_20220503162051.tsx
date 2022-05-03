@@ -59,12 +59,11 @@ const  App:FunctionComponent  = (props) =>  {
     return(
         <>
             <Container className="text-center mt-2">
-                <h3>Search Trademarks published in the weekly trademark gazette</h3>
+                <h1>TRADEMARK GAZETTE SEARCHER</h1>
                 <p>Please upload the excel file containing trademarks</p>
                 <div className="d-flex justify-content-center"><FileUploader handleChange={fileUpload}  name="excelFile"  types={['xls', ]} classes="drag-and-drop-box" maxSize="10"/></div>
                {loading ?  <Spinner animation="border" /> : ''} 
             </Container>
-            { searchRes ? 
             <Container className="mt-5">
             
                 <Table striped bordered hover size="sm" className="tm-table">
@@ -74,12 +73,12 @@ const  App:FunctionComponent  = (props) =>  {
                     <th className="tm-col">TRADEMARK</th>
                     <th className="tm-regTm-col">Registered Trademark</th>
                     <th className="tm-details-col">DETAILS</th>
-                    <th className="tm-pdf-col">Journal</th>
+                    <th className="tm-pdf-col">PAGE NO</th>
                     <th className="tm-class-col">CLASS</th>
                     
                 </tr>
             </thead>
-            
+            { searchRes ? 
             <tbody>
                 {searchRes.map((tm, i) => {
                     return(
@@ -107,13 +106,13 @@ const  App:FunctionComponent  = (props) =>  {
                     )
                 })}
                 
-            </tbody>
-            
+            </tbody> : ''
+            }
             </Table > 
 
             
             
-            </Container> : ''}
+            </Container>
         </>
         
     )

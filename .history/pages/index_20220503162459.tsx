@@ -74,7 +74,7 @@ const  App:FunctionComponent  = (props) =>  {
                     <th className="tm-col">TRADEMARK</th>
                     <th className="tm-regTm-col">Registered Trademark</th>
                     <th className="tm-details-col">DETAILS</th>
-                    <th className="tm-pdf-col">Journal</th>
+                    <th className="tm-pdf-col">PAGE NO</th>
                     <th className="tm-class-col">CLASS</th>
                     
                 </tr>
