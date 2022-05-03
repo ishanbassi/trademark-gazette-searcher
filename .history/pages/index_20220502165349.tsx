@@ -116,4 +116,11 @@ const  App:FunctionComponent  = (props) =>  {
     )
 }
 
+export const  getServerSideProps:GetServerSideProps = async () => {
+    return {
+        props:{
+            'testing':'ishan bassii'
+        }
+    }
+}
 export default App

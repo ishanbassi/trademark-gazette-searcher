@@ -2,15 +2,13 @@ import { GetServerSideProps} from "next"
 import { FunctionComponent, useEffect, useState } from "react"
 import {Table, Container, Spinner} from 'react-bootstrap'
 import {FileUploader} from 'react-drag-drop-files'
-import { CellObject, read, WorkSheet } from "xlsx"
+import { read } from "xlsx"
 import { TmDataInterface } from "../utilities/textExtraction"
 interface TmSearchResInterface extends TmDataInterface{
     loading:boolean
     regtm :string
 }
-interface XlsxSheetInterface {
 
-}
 const  App:FunctionComponent  = (props) =>  {
     const [searchRes,   setSearchRes] = useState<TmSearchResInterface[]>()
     const [loading ,setLoading ] = useState(false)
@@ -21,36 +19,23 @@ const  App:FunctionComponent  = (props) =>  {
         const file = read(await xlsFile.arrayBuffer())
         const sheetData = file.Sheets['Original']
         const tmClassArr = []
-        const cells = sheetData["!ref"] ? parseInt(sheetData["!ref"].split(':')[1].match(/\d+/)[0]) : null
-        
-        const alphabets = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
-        const tmCellRegExp = /^trade\s?marks?/
-        const tmCell = {}
-
-        alphabets.split('').forEach(alphabet => {
-            const cellValue:string =  sheetData[`${alphabet}1`].w.toLowerCase()
-            if(tmCellRegExp.test(cellValue)) tmCell['tm'] = alphabet
-            else if(cellValue === 'class') tmCell['class'] = alphabet
-        })
-        if(tmCell['tm'] && tmCell['class']) {
-            
-            for(let i=0;i< cells ; i++) {
-                if(sheetData[`${tmCell['tm']}${i+1}`] && sheetData[`${tmCell['class']}${i+1}`])
-                tmClassArr.push(
-                    {
-                        'trademark':sheetData[`${tmCell['tm']}${i+1}`]?.w,
-                        'tmClass':sheetData[`${tmCell['class']}${i+1}`]?.w
-                    }
-                )
+        console.log(sheetData)
+        Object.entries(sheetData).forEach((pair) => {
+            const trademark = {}
+            if(pair[0].startsWith('E')) {
+                const [ , colNum] = pair[0].split('E')
+                trademark['tmClass']= sheetData[`D${colNum}`].w
+                trademark['trademark'] = pair[1].w
+                tmClassArr.push(trademark)
+    
             }
-        }
+              
+        })  
         
-        
-        
-        const result =  await fetch('/api/fileReader', {method:'POST', body:JSON.stringify(tmClassArr)})
-        .then(res => res.json())
-        .catch(err => <div>{err}</div>)
-        setSearchRes(result)
+        // const result =  await fetch('/api/fileReader', {method:'POST', body:JSON.stringify(tmClassArr)})
+        // .then(res => res.json())
+        // .catch(err => <div>{err}</div>)
+        // setSearchRes(result)
         setLoading(false)
         
     }   
@@ -116,4 +101,11 @@ const  App:FunctionComponent  = (props) =>  {
     )
 }
 
+export const  getServerSideProps:GetServerSideProps = async () => {
+    return {
+        props:{
+            'testing':'ishan bassii'
+        }
+    }
+}
 export default App

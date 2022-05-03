@@ -1,5 +1,7 @@
 export{}
 require('dotenv').config()
+require('ts-node/register')
+
 module.exports = {
     development:{
         client: 'pg',
@@ -11,15 +13,6 @@ module.exports = {
         database : process.env.DEV_PG_DATABASE
         }    
     },
-    production: {
-        client:"pg",
-        connection:{
-            connectionString:process.env.DATABASE_URL,
-            ssl:{
-                rejectUnauthorized:false
-            }
-        }
-    }
     
     
     

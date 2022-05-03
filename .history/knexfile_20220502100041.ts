@@ -1,5 +1,6 @@
 export{}
 require('dotenv').config()
+console.log(process.env)
 module.exports = {
     development:{
         client: 'pg',
@@ -11,15 +12,6 @@ module.exports = {
         database : process.env.DEV_PG_DATABASE
         }    
     },
-    production: {
-        client:"pg",
-        connection:{
-            connectionString:process.env.DATABASE_URL,
-            ssl:{
-                rejectUnauthorized:false
-            }
-        }
-    }
     
     
     
