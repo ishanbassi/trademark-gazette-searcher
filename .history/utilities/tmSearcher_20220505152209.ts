@@ -34,7 +34,7 @@ export async  function fullTmSearch(tmArray:TmInterface[], table) {
         const result = db(table).select(['page_no', 'details', 'tm_class', 'trademark', db.raw(`? as regTm`, tm.trademark)])
         .where(function () {
             this.where('trademark', tm.trademark)
-            .orWhereILike('trademark', `%${tm.trademark}%`)
+            .orWhereILike('trademark', `%${tm}%`)
             .orWhereIn('trademark' , wordsList)
             .orWhere('tm_phonetics', tmPhonetics)
             

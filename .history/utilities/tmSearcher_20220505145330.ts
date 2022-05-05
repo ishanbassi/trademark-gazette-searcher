@@ -30,7 +30,7 @@ export async  function fullTmSearch(tmArray:TmInterface[], table) {
     const searchResult = await Promise.all(tmArray.map(async tm => {
         const tmPhonetics = Metaphone.process(tm.trademark)
         const wordsList = tm.trademark.split(' ')
-        
+        console.log(tm)
         const result = db(table).select(['page_no', 'details', 'tm_class', 'trademark', db.raw(`? as regTm`, tm.trademark)])
         .where(function () {
             this.where('trademark', tm.trademark)
@@ -39,7 +39,7 @@ export async  function fullTmSearch(tmArray:TmInterface[], table) {
             .orWhere('tm_phonetics', tmPhonetics)
             
         })
-        
+        .andWhere('tm_class', parseInt(tm.tmClass))
         
         
 

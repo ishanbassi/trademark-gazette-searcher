@@ -39,7 +39,7 @@ export async  function fullTmSearch(tmArray:TmInterface[], table) {
             .orWhere('tm_phonetics', tmPhonetics)
             
         })
-        
+        .andWhere('tm_class', parseInt(tm.tmClass))
         
         
 
