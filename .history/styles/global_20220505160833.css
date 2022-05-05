@@ -6,12 +6,33 @@
     max-height:4rem; 
     height: 4rem;
     vertical-align: middle;
-    font-weight: 600;    
+    font-weight: 600;
+    
 }
 
 
+.tm-no-col{
+    
+}
+.tm-col{
+    
+}
+.tm-regTm-col{
+    
+}
+.tm-details-col{
+    
+    
+}
+.tm-class-col{
+    
+}
+.tm-pdf-col{
+    
+    
+}
 .tm-table td>div {
-    overflow:auto;
+    overflow:hidden
     height:5rem;
       
 }

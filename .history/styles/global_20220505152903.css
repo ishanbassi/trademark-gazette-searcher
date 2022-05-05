@@ -1,4 +1,5 @@
-.tm-table { 
+.tm-table {
+    
     width:100%;  
     text-align: center;  
 }
@@ -6,10 +7,31 @@
     max-height:4rem; 
     height: 4rem;
     vertical-align: middle;
-    font-weight: 600;    
+    font-weight: 600;
+    
 }
 
 
+.tm-no-col{
+    width:4%;
+}
+.tm-col{
+    width:15%;
+}
+.tm-regTm-col{
+    width: 15%;
+}
+.tm-details-col{
+    width:50%;
+    
+}
+.tm-class-col{
+    width:6%
+}
+.tm-pdf-col{
+    width:10%
+    
+}
 .tm-table td>div {
     overflow:auto;
     height:5rem;
