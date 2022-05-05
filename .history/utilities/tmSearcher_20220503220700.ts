@@ -36,7 +36,7 @@ export async  function fullTmSearch(tmArray:TmInterface[], table) {
         .orWhereILike('trademark', `%${tm}%`)
         .orWhereIn('trademark' , wordsList)
         .orWhere('tm_phonetics', tmPhonetics)
-        
+        .andWhere("tm_class", parseInt(tm.tmClass))
 
         
         return result
