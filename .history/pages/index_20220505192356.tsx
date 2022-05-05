@@ -54,13 +54,13 @@ const  App:FunctionComponent  = (props) =>  {
         
         
 
+        console.log(tmClassArr)        
         
-        
-        const result =  await fetch('/api/fileReader', {method:'POST', body:JSON.stringify(tmClassArr)})
-        .then(res => res.json())
-        .catch(err => <div>{err}</div>)
-        setSearchRes(result)
-        setLoading(false)
+        // const result =  await fetch('/api/fileReader', {method:'POST', body:JSON.stringify(tmClassArr)})
+        // .then(res => res.json())
+        // .catch(err => <div>{err}</div>)
+        // setSearchRes(result)
+        // setLoading(false)
         
     }   
     

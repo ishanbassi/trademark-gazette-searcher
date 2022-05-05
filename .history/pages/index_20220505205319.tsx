@@ -66,14 +66,14 @@ const  App:FunctionComponent  = (props) =>  {
     
     return(
         <>
-            <Container fluid="sm" className="text-center mt-2">
+            <Container fluid className="text-center mt-2">
                 <h3>Search Trademarks published in the weekly trademark gazette</h3>
                 <p>Please upload the excel file containing trademarks</p>
                 <div className="d-flex justify-content-center"><FileUploader handleChange={fileUpload}  name="excelFile"  types={['xls', ]} classes="drag-and-drop-box" maxSize="10"/></div>
                {loading ?  <Spinner animation="border" /> : ''} 
             </Container>
             { searchRes ? 
-            <Container className="mt-5" fluid="sm">
+            <Container className="mt-5" fluid>
             
                 <Table striped bordered hover size="sm" className="tm-table">
             <thead>

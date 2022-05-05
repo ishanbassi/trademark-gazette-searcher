@@ -20,47 +20,43 @@ const  App:FunctionComponent  = (props) =>  {
         setLoading(true)
         const file = read(await xlsFile.arrayBuffer())
         const sheetData = file.Sheets['Original']
-        console.log(file)
         const tmClassArr = []
         const excelRows = sheetData["!ref"] ? parseInt(sheetData["!ref"].split(':')[1].match(/\d+/)[0]) : null
         
         const tmCellRegExp = /^trade\s?marks?$/
         const tmClassCellRegExp = /^classe?s?$/
         const tmCell = {}
-        for(let sheets of file.SheetNames){
-            for(let cell of Object.entries(file.Sheets[sheets])) {
-                const cellValue = cell[1].w?.toLowerCase()
-                if(tmCellRegExp.test(cellValue)) tmCell['tm'] = cell[0].match(/[A-Z]+/)[0]
-                else if(tmClassCellRegExp.test(cellValue)) tmCell['class'] = cell[0].match(/[A-Z]+/)[0]
-                
-                if(tmCell['tm'] && tmCell['class']){
-                    for(let i=1;i <= excelRows ; i++) {
-                        
-                        if(sheetData[`${tmCell['tm']}${i}`] && sheetData[`${tmCell['class']}${i}`]) {
-                            tmClassArr.push(
-                                {
-                                    'trademark':sheetData[`${tmCell['tm']}${i}`].w,
-                                    'tmClass':sheetData[`${tmCell['class']}${i}`].w
-                                }
-                            )
-                        }
-                        
+        
+        for(let cell of Object.entries(sheetData)) {
+            const cellValue = cell[1].w?.toLowerCase()
+            if(tmCellRegExp.test(cellValue)) tmCell['tm'] = cell[0].match(/\w\w?/)[0]
+            else if(tmClassCellRegExp.test(cellValue)) tmCell['class'] = cell[0].match(/\w\w?/)[0]
+            
+            if(tmCell['tm'] && tmCell['class']){
+                for(let i=1;i <= excelRows ; i++) {
+                    
+                    if(sheetData[`${tmCell['tm']}${i}`] && sheetData[`${tmCell['class']}${i}`]) {
+                        tmClassArr.push(
+                            {
+                                'trademark':sheetData[`${tmCell['tm']}${i}`].w,
+                                'tmClass':sheetData[`${tmCell['class']}${i}`].w
+                            }
+                        )
                     }
-                    break;
+                    
                 }
+                break;
             }
-
         }
         
-        
 
+        console.log(tmClassArr)        
         
-        
-        const result =  await fetch('/api/fileReader', {method:'POST', body:JSON.stringify(tmClassArr)})
-        .then(res => res.json())
-        .catch(err => <div>{err}</div>)
-        setSearchRes(result)
-        setLoading(false)
+        // const result =  await fetch('/api/fileReader', {method:'POST', body:JSON.stringify(tmClassArr)})
+        // .then(res => res.json())
+        // .catch(err => <div>{err}</div>)
+        // setSearchRes(result)
+        // setLoading(false)
         
     }   
     
