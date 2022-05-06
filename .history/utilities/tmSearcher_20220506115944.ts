@@ -29,16 +29,24 @@ export async  function fullTmSearch(tmArray:TmInterface[], table) {
     
     const searchResult = await Promise.all(tmArray.map(async tm => {
         const tmPhonetics = Metaphone.process(tm.trademark)
-        const wordsList = tm.trademark.split(' ')
-        
+
+        // filtering small words like "spa" , "and" etc 
+        const wordsList = tm.trademark.split(' ').filter(word => word.length > 3)
+        console.log(wordsList)
         const result = db(table).select(['page_no', 'details', 'tm_class', 'trademark', db.raw(`? as regTm`, tm.trademark)])
         .where(function () {
             this.where('trademark', tm.trademark)
             .orWhereILike('trademark', `%${tm.trademark}%`)
+            .orWhereIn('trademark' , wordsList)
             .orWhere('tm_phonetics', tmPhonetics)
+            .orWhere(builder => {
+                wordsList.map(word => builder.orWhereILike('trademark', `%${word}%`))
+            })
             
         })
         .andWhere('tm_class', parseInt(tm.tmClass) | 0)
+        
+
         
         return result
     }))

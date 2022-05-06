@@ -35,10 +35,16 @@ export async  function fullTmSearch(tmArray:TmInterface[], table) {
         .where(function () {
             this.where('trademark', tm.trademark)
             .orWhereILike('trademark', `%${tm.trademark}%`)
+            .orWhereIn('trademark' , wordsList)
             .orWhere('tm_phonetics', tmPhonetics)
+            .orWhere(builder => {
+                wordsList.map(word => builder.orWhereILike('trademark', `%${word}%`))
+            })
             
         })
         .andWhere('tm_class', parseInt(tm.tmClass) | 0)
+        
+
         
         return result
     }))

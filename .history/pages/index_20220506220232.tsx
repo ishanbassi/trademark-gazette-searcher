@@ -13,7 +13,6 @@ interface XlsxSheetInterface {
 }
 const  App:FunctionComponent  = (props) =>  {
     const [searchRes,   setSearchRes] = useState<TmSearchResInterface[]>()
-    const [isTMFile , setIsTMFile] = useState(true)
     const [loading ,setLoading ] = useState(false)
     
     // FileUploader component only gives file as an argument instead  on an element
@@ -62,12 +61,10 @@ const  App:FunctionComponent  = (props) =>  {
         .then(res => res.json())
         .catch(err => <div>{err}</div>)
         setSearchRes(result)
-        setIsTMFile(true)
         setLoading(false)
         
         }else{
-            setIsTMFile(false)        
-            setLoading(false)
+            return <div>hii</div>
         }
         
     }   
@@ -80,11 +77,6 @@ const  App:FunctionComponent  = (props) =>  {
                 <div className="d-flex justify-content-center"><FileUploader handleChange={fileUpload}  name="excelFile"  types={['xls', ]} classes="drag-and-drop-box" maxSize="10"/></div>
                {loading ?  <Spinner animation="border" /> : ''} 
             </Container>
-            { !isTMFile ?
-                <div>
-                    <p>The Excel file you uploaded does not have trademarks in it.</p>
-                </div>
-            :''}
             { searchRes ? 
             <Container className="mt-5" fluid="sm">
             

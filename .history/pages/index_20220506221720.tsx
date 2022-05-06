@@ -84,7 +84,7 @@ const  App:FunctionComponent  = (props) =>  {
                 <div>
                     <p>The Excel file you uploaded does not have trademarks in it.</p>
                 </div>
-            :''}
+            :}
             { searchRes ? 
             <Container className="mt-5" fluid="sm">
             

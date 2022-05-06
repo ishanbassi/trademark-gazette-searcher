@@ -40,6 +40,8 @@ export async  function fullTmSearch(tmArray:TmInterface[], table) {
         })
         .andWhere('tm_class', parseInt(tm.tmClass) | 0)
         
+
+        
         return result
     }))
     

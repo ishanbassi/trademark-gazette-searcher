@@ -13,21 +13,22 @@ interface XlsxSheetInterface {
 }
 const  App:FunctionComponent  = (props) =>  {
     const [searchRes,   setSearchRes] = useState<TmSearchResInterface[]>()
-    const [isTMFile , setIsTMFile] = useState(true)
     const [loading ,setLoading ] = useState(false)
     
     // FileUploader component only gives file as an argument instead  on an element
     const fileUpload =   async (xlsFile:File) => {
         setLoading(true)
         const file = read(await xlsFile.arrayBuffer())
+        
+        console.log(file)
         const tmClassArr = []
         
         
         const tmCellRegExp = /^trade\s?marks?$/
         const tmClassCellRegExp = /^classe?s?$/
-        
+        const tmCell = {}
         for(let sheets of file.SheetNames){
-            const tmCell = {}    
+            
             const excelRows = file.Sheets[sheets]["!ref"] ? parseInt(file.Sheets[sheets]["!ref"].split(':')[1].match(/\d+/)[0]) : null
 
             for(let cell of Object.entries(file.Sheets[sheets])) {
@@ -57,18 +58,12 @@ const  App:FunctionComponent  = (props) =>  {
         
 
         
-        if(tmClassArr.length > 0){
-            const result =  await fetch('/api/fileReader', {method:'POST', body:JSON.stringify(tmClassArr)})
+        
+        const result =  await fetch('/api/fileReader', {method:'POST', body:JSON.stringify(tmClassArr)})
         .then(res => res.json())
         .catch(err => <div>{err}</div>)
         setSearchRes(result)
-        setIsTMFile(true)
         setLoading(false)
-        
-        }else{
-            setIsTMFile(false)        
-            setLoading(false)
-        }
         
     }   
     
@@ -80,11 +75,6 @@ const  App:FunctionComponent  = (props) =>  {
                 <div className="d-flex justify-content-center"><FileUploader handleChange={fileUpload}  name="excelFile"  types={['xls', ]} classes="drag-and-drop-box" maxSize="10"/></div>
                {loading ?  <Spinner animation="border" /> : ''} 
             </Container>
-            { !isTMFile ?
-                <div>
-                    <p>The Excel file you uploaded does not have trademarks in it.</p>
-                </div>
-            :''}
             { searchRes ? 
             <Container className="mt-5" fluid="sm">
             

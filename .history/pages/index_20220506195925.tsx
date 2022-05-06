@@ -13,24 +13,23 @@ interface XlsxSheetInterface {
 }
 const  App:FunctionComponent  = (props) =>  {
     const [searchRes,   setSearchRes] = useState<TmSearchResInterface[]>()
-    const [isTMFile , setIsTMFile] = useState(true)
     const [loading ,setLoading ] = useState(false)
     
     // FileUploader component only gives file as an argument instead  on an element
     const fileUpload =   async (xlsFile:File) => {
         setLoading(true)
         const file = read(await xlsFile.arrayBuffer())
+        
         const tmClassArr = []
         
         
         const tmCellRegExp = /^trade\s?marks?$/
         const tmClassCellRegExp = /^classe?s?$/
-        
-        for(let sheets of file.SheetNames){
-            const tmCell = {}    
-            const excelRows = file.Sheets[sheets]["!ref"] ? parseInt(file.Sheets[sheets]["!ref"].split(':')[1].match(/\d+/)[0]) : null
-
-            for(let cell of Object.entries(file.Sheets[sheets])) {
+        const tmCell = {}
+        for(let sheet of file.SheetNames){
+            
+            const excelRows = file.Sheets[sheet]["!ref"] ? parseInt(file.Sheets[sheet]["!ref"].split(':')[1].match(/\d+/)[0]) : null
+            for(let cell of Object.entries(file.Sheets[sheet])) {
                 const cellValue = cell[1].w?.toLowerCase()
                 if(tmCellRegExp.test(cellValue)) tmCell['tm'] = cell[0].match(/[A-Z]+/)[0]
                 else if(tmClassCellRegExp.test(cellValue)) tmCell['class'] = cell[0].match(/[A-Z]+/)[0]
@@ -38,11 +37,11 @@ const  App:FunctionComponent  = (props) =>  {
                 if(tmCell['tm'] && tmCell['class']){
                     for(let i=1;i <= excelRows ; i++) {
                         
-                        if(file.Sheets[sheets][`${tmCell['tm']}${i}`] && file.Sheets[sheets][`${tmCell['class']}${i}`]) {
+                        if(file.Sheets[sheet][`${tmCell['tm']}${i}`] && file.Sheets[sheet][`${tmCell['class']}${i}`]) {
                             tmClassArr.push(
                                 {
-                                    'trademark':file.Sheets[sheets][`${tmCell['tm']}${i}`].w,
-                                    'tmClass':file.Sheets[sheets][`${tmCell['class']}${i}`].w
+                                    'trademark':sheet[`${tmCell['tm']}${i}`].w,
+                                    'tmClass':sheet[`${tmCell['class']}${i}`].w
                                 }
                             )
                         }
@@ -57,18 +56,12 @@ const  App:FunctionComponent  = (props) =>  {
         
 
         
-        if(tmClassArr.length > 0){
-            const result =  await fetch('/api/fileReader', {method:'POST', body:JSON.stringify(tmClassArr)})
+        
+        const result =  await fetch('/api/fileReader', {method:'POST', body:JSON.stringify(tmClassArr)})
         .then(res => res.json())
         .catch(err => <div>{err}</div>)
         setSearchRes(result)
-        setIsTMFile(true)
         setLoading(false)
-        
-        }else{
-            setIsTMFile(false)        
-            setLoading(false)
-        }
         
     }   
     
@@ -80,11 +73,6 @@ const  App:FunctionComponent  = (props) =>  {
                 <div className="d-flex justify-content-center"><FileUploader handleChange={fileUpload}  name="excelFile"  types={['xls', ]} classes="drag-and-drop-box" maxSize="10"/></div>
                {loading ?  <Spinner animation="border" /> : ''} 
             </Container>
-            { !isTMFile ?
-                <div>
-                    <p>The Excel file you uploaded does not have trademarks in it.</p>
-                </div>
-            :''}
             { searchRes ? 
             <Container className="mt-5" fluid="sm">
             
