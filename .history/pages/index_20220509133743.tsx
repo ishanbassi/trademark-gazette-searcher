@@ -1,5 +1,4 @@
 import { GetServerSideProps} from "next"
-import Head from 'next/head'
 import { FunctionComponent, useEffect, useRef, useState } from "react"
 import {Table, Container, Spinner, Button} from 'react-bootstrap'
 import {FileUploader} from 'react-drag-drop-files'
@@ -37,7 +36,6 @@ const  App:FunctionComponent  = (props) =>  {
     // FileUploader component only gives file as an argument instead  on an element
     const fileUpload =   async (xlsFile:File) => {
         setSearchRes([])
-        tmClassArr.current = []
         const file = read(await xlsFile.arrayBuffer())
     
         
@@ -55,13 +53,12 @@ const  App:FunctionComponent  = (props) =>  {
                 
                 if(tmCell['tm'] && tmCell['class']){
                     for(let i=1;i <= excelRows ; i++) {
-                        let tm =  file.Sheets[sheets][`${tmCell['tm']}${i}`] , tmClass = file.Sheets[sheets][`${tmCell['class']}${i}`]
-
-                        if( tm && tm.w.length > 2 && tmClass) {
+                        
+                        if(file.Sheets[sheets][`${tmCell['tm']}${i}`] && file.Sheets[sheets][`${tmCell['class']}${i}`]) {
                             tmClassArr.current.push(
                                 {
-                                    'trademark':tm.w,
-                                    'tmClass':tmClass.w
+                                    'trademark':file.Sheets[sheets][`${tmCell['tm']}${i}`].w,
+                                    'tmClass':file.Sheets[sheets][`${tmCell['class']}${i}`].w
                                 }
                             )
                         }
@@ -78,9 +75,6 @@ const  App:FunctionComponent  = (props) =>  {
     
     return(
         <>
-            <Head>
-                <title>Trademark Searcher</title>
-            </Head>
             <Container fluid="md" className="text-center mt-2">
                 <h3>Search Trademarks published in the weekly trademark gazette</h3>
                 <p>Please upload the excel file containing trademarks</p>
@@ -143,12 +137,9 @@ const  App:FunctionComponent  = (props) =>  {
             
             
             </Container> : ''}
-
-            {loading ?  
             <Container fluid="md" className="text-center mt-2">
-            <Spinner animation="border" />
-            </Container> : ''} 
-
+            {loading ?  <Spinner animation="border" /> : ''} 
+            </Container>
             {tmClassArr.current.length > 0 ? 
              <Container  fluid="md" className="text-center mt-2">
                 <Button
