@@ -1,10 +1,6 @@
 import {Metaphone, DoubleMetaphone} from 'natural'
 import {db,closeConnection} from '../dbConnection'
-
-export interface TmInterface {
-    trademark:string;
-    tmClass:string
-}
+import { TmInterface } from '../pages/api/fileReader'
 export async function exactMatch(keyword, table) {
     const tms = await db(table).where('trademark', keyword.toUpperCase())
     await closeConnection()
@@ -29,7 +25,7 @@ export async function phoneticSearch(keyword, table) {
 }
 
 // a function to perform exact match, phonetic search and containWords search
-export async  function fullTmSearch(tmArray:TmInterface[], table:string) {
+export async  function fullTmSearch(tmArray:TmInterface[], table) {
     
     const searchResult = await Promise.all(tmArray.map(async tm => {
         const tmPhonetics = Metaphone.process(tm.trademark)
@@ -38,15 +34,18 @@ export async  function fullTmSearch(tmArray:TmInterface[], table:string) {
         const result = db(table).select(['page_no', 'details', 'tm_class', 'trademark', db.raw(`? as regTm`, tm.trademark)])
         .where(function () {
             this.where('trademark', tm.trademark)
-            .orWhereILike('trademark', `%${tm.trademark}%`)
+            .orWhereILike('trademark', `%${tm}%`)
+            .orWhereIn('trademark' , wordsList)
             .orWhere('tm_phonetics', tmPhonetics)
             
         })
-        .andWhere('tm_class', parseInt(tm.tmClass) | 0)
+        
+        
+        
+
         
         return result
     }))
-    
     
     return searchResult.reduce((prevArr, currArr) => prevArr.concat(currArr))
     

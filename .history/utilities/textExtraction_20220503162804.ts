@@ -21,12 +21,12 @@ export function extractPdfText(filePath:string, options?:PDFExtractOptions) {
             } 
             
             data.pages.forEach((page, i) =>{
-                let trademark:string = '', details: string[] = []
+                let trademark:string, details: string[] = []
 
                 page.content.forEach( (data,i) => {
                     // only trademarks are having height of 23.94
                     if (data.height >= 23 && data.height <= 24 && data.x >= 58 && data.x<= 59){
-                         trademark += ` ${data.str.toUpperCase()}`
+                         trademark = data.str.toUpperCase()
                         
                     }
                     
@@ -44,7 +44,7 @@ export function extractPdfText(filePath:string, options?:PDFExtractOptions) {
                         "page_no": `Page no. ${page.pageInfo.num},journal no. ${journal}`,
                         trademark,
                         details:details.join(' '),
-                        tm_class:parseInt(tmClass),
+                        tm_class:tmClass,
                         tm_phonetics
                     })
                     

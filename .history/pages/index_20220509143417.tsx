@@ -1,5 +1,4 @@
 import { GetServerSideProps} from "next"
-import Head from 'next/head'
 import { FunctionComponent, useEffect, useRef, useState } from "react"
 import {Table, Container, Spinner, Button} from 'react-bootstrap'
 import {FileUploader} from 'react-drag-drop-files'
@@ -78,9 +77,6 @@ const  App:FunctionComponent  = (props) =>  {
     
     return(
         <>
-            <Head>
-                <title>Trademark Searcher</title>
-            </Head>
             <Container fluid="md" className="text-center mt-2">
                 <h3>Search Trademarks published in the weekly trademark gazette</h3>
                 <p>Please upload the excel file containing trademarks</p>
@@ -161,4 +157,11 @@ const  App:FunctionComponent  = (props) =>  {
     )
 }
 
+export const  getServerSideProps:GetServerSideProps = async () => {
+    return {
+        props:{
+            'testing':'ishan bassii'
+        }
+    }
+}
 export default App
