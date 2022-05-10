@@ -22,15 +22,13 @@ const  App:FunctionComponent  = (props) =>  {
         
         if(loading) {
             
-            fetch('/api/fileReader', {method:'POST', body:JSON.stringify(tmClassArr.current.splice(0,250))})
+            fetch('/api/fileReader', {method:'POST', body:JSON.stringify(tmClassArr.current.splice(0,1000))})
             .then(res => res.json())
             .then(data =>{
                 setSearchRes(prevState=> prevState.concat(data))
                 setLoading(false)
             })
-            .catch(err =>{
-                setLoading(false)
-            })
+            .catch(err => err)
             
         }
     },[loading]
@@ -167,4 +165,11 @@ const  App:FunctionComponent  = (props) =>  {
     )
 }
 
+export const  getServerSideProps:GetServerSideProps = async () => {
+    return {
+        props:{
+            'testing':'ishan bassii'
+        }
+    }
+}
 export default App
