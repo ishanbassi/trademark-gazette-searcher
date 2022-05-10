@@ -5,9 +5,10 @@ const pdfExtract =  new PDFExtract()
 
 export interface TmDataInterface {
     page_no:number,
+    journal_no:number,
     trademark:string,
     details:string,
-    tm_class:string,
+    tm_class:number,
     tm_phonetics:string
 }
 export function extractPdfText(filePath:string, options?:PDFExtractOptions) {
@@ -41,7 +42,8 @@ export function extractPdfText(filePath:string, options?:PDFExtractOptions) {
                     const[ ,journal,tmClass] = journalAndClass.match(/Trade Marks Journal No:\s+(\d\d\d\d).+Class\s+(\d\d?)/)
                     
                     content.push({
-                        "page_no": `Page no. ${page.pageInfo.num},journal no. ${journal}`,
+                        "page_no":page.pageInfo.num,
+                        "journal_no":parseInt(journal),
                         trademark,
                         details:details.join(' '),
                         tm_class:parseInt(tmClass),

@@ -25,27 +25,28 @@ export async function phoneticSearch(keyword, table) {
 }
 
 // a function to perform exact match, phonetic search and containWords search
-export async  function fullTmSearch(tmArray:TmInterface[]) {
+export async  function fullTmSearch(tmArray:TmInterface[], table) {
     
-    const tms = await db('tm_detail')
-    
-    .orWhere((builder) => {
-        tmArray.forEach(tm =>{
-            const tmPhonetics = Metaphone.process(tm.trademark)
-            const wordsList = tm.trademark.split(' ')
-            builder.orWhere('trademark', tm.trademark)
-            .orWhereILike('trademark', `%${tm}%`)
+    const searchResult = await Promise.all(tmArray.map(async tm => {
+        const tmPhonetics = Metaphone.process(tm.trademark)
+        const wordsList = tm.trademark.split(' ')
+        
+        const result = db(table).select(['page_no', 'details', 'tm_class', 'trademark', db.raw(`? as regTm`, tm.trademark)])
+        .where(function () {
+            this.where('trademark', tm.trademark)
+            .orWhereILike('trademark', `%${tm.trademark}%`)
             .orWhereIn('trademark' , wordsList)
             .orWhere('tm_phonetics', tmPhonetics)
-            .orWhereLike('tm_phonetics', `%${tmPhonetics}%`)
+            
         })
-          
+        .andWhere('tm_class', parseInt(tm.tmClass) | 0)
+        .orderBy('journal_no', 'desc')
+
         
-    })
+        return result
+    }))
     
-    
-    await closeConnection()
-    return tms    
+    return searchResult.reduce((prevArr, currArr) => prevArr.concat(currArr))
     
 }
 
