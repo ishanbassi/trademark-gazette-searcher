@@ -42,7 +42,7 @@ export async  function fullTmSearch(tmArray:TmInterface[], table) {
         
         return result
     }))
-    const orderedResult = searchResult.reduce((prevArr, currArr) => prevArr.concat(currArr)).sort((a,b)=> b.journal_no - a.journal_no)
+    const orderedResult = searchResult.reduce((prevArr, currArr) => prevArr.concat(currArr)).sort((a,b)=> a.journal_no - b.journal_no)
     
     return orderedResult
     

@@ -31,7 +31,8 @@ export async  function fullTmSearch(tmArray:TmInterface[], table) {
         const tmPhonetics = Metaphone.process(tm.trademark)
         const wordsList = tm.trademark.split(' ')
         
-        const result: any[] = await db(table).select(['page_no', 'details', 'tm_class', 'trademark', 'journal_no', db.raw(`? as regTm`, tm.trademark)])
+        const result = db(table).select(['page_no', 'details', 'tm_class', 'trademark', 'journal_no', db.raw(`? as regTm`, tm.trademark)])
+        .orderBy('journal_no', 'desc')
         .where(function () {
             this.where('trademark', tm.trademark)
             .orWhereILike('trademark', `%${tm.trademark}%`)
@@ -40,11 +41,12 @@ export async  function fullTmSearch(tmArray:TmInterface[], table) {
         })
         .andWhere('tm_class', parseInt(tm.tmClass) | 0)
         
+
+        
         return result
     }))
-    const orderedResult = searchResult.reduce((prevArr, currArr) => prevArr.concat(currArr)).sort((a,b)=> b.journal_no - a.journal_no)
     
-    return orderedResult
+    return searchResult.reduce((prevArr, currArr) => prevArr.concat(currArr))
     
 }
 

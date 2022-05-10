@@ -17,7 +17,7 @@ const  App:FunctionComponent  = (props) =>  {
     const [isTMFile , setIsTMFile] = useState(true)
     const [loading ,setLoading ] = useState(false)
     const tmClassArr = useRef([])
-    
+    console.log(tmClassArr)
     useEffect( () => {
         
         if(loading) {
