@@ -5,10 +5,9 @@ const pdfExtract =  new PDFExtract()
 
 export interface TmDataInterface {
     page_no:number,
-    journal_no:number,
     trademark:string,
     details:string,
-    tm_class:number,
+    tm_class:string,
     tm_phonetics:string
 }
 export function extractPdfText(filePath:string, options?:PDFExtractOptions) {
