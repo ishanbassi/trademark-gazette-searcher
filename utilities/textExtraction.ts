@@ -27,7 +27,7 @@ export function extractPdfText(filePath:string, options?:PDFExtractOptions) {
                 page.content.forEach( (data,i) => {
                     // only trademarks are having height of 23.94
                     if (data.height >= 23 && data.height <= 24 && data.x >= 58 && data.x<= 59){
-                         trademark += ` ${data.str.toUpperCase()}`
+                         trademark += `${data.str.toUpperCase()}`
                         
                     }
                     
