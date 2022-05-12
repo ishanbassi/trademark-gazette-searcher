@@ -66,7 +66,7 @@ const  App:FunctionComponent  = (props) =>  {
                         if( tm && tm.w.length > 2 && tmClass) {
                             tmClassArr.current.push(
                                 {
-                                    'trademark':tm.w.topperCase(),
+                                    'trademark':tm.w.toUpperCase(),
                                     'tmClass':tmClass.w
                                 }
                             )

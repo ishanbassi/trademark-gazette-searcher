@@ -33,7 +33,6 @@ export async  function fullTmSearch(tmArray:TmInterface[], table:string) {
     
     const searchResult = await Promise.all(tmArray.map(async tm => {
         const tmPhonetics = Metaphone.process(tm.trademark)
-        const wordsList = tm.trademark.split(' ')
         
         const result: any[] = await db(table).select(['page_no', 'details', 'tm_class', 'trademark', 'journal_no', db.raw(`? as regTm`, tm.trademark)])
         .where(function () {
