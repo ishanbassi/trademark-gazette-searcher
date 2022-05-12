@@ -4,7 +4,8 @@ import { Knex } from "knex";
 console.log(process.env.NODE_ENV)
 export async function up(knex: Knex): Promise<void> {
     return knex.schema.createTable('tm_details', table => {
-        table.increments().primary()
+        table.primary(['trademark', 'tm_class'])
+        table.increments()
         table.integer('page_no').notNullable()
         table.string('trademark').notNullable()
         table.text('details').notNullable()
