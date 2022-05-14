@@ -1,31 +1,37 @@
 import { GetServerSideProps} from "next"
 import Head from 'next/head'
 import { FunctionComponent, useEffect, useRef, useState } from "react"
-import {Table, Container, Spinner, Button} from 'react-bootstrap'
+import {Table, Container, Spinner, Button, Form, Row, Col} from 'react-bootstrap'
 import {FileUploader} from 'react-drag-drop-files'
 import { CellObject, read, WorkSheet } from "xlsx"
 import { TmDataInterface } from "../utilities/textExtraction"
 interface TmSearchResInterface extends TmDataInterface{
-    
     regtm :string
 }
-interface XlsxSheetInterface {
 
-}
 const  App:FunctionComponent  = (props) =>  {
-    const [searchRes,   setSearchRes] = useState<TmSearchResInterface[]>([])
+    const [searchRes,   setSearchRes] = useState<TmSearchResInterface[]>()
     const [isTMFile , setIsTMFile] = useState(true)
     const [loading ,setLoading ] = useState(false)
+    const [journals, setJournals] = useState([])
+
     const tmClassArr = useRef([])
-    
+    const journalRef = useRef(null)
+    useEffect(() => {
+        fetch('/api/fileReader', {method:'GET'})
+        .then(res => res.json())
+        .then(data =>setJournals(data))
+    }, [])
     useEffect( () => {
         
         if(loading) {
-            
-            fetch('/api/fileReader', {method:'POST', body:JSON.stringify(tmClassArr.current.splice(0,250))})
+            setSearchRes(null)
+            const journal_no = journalRef.current.selectedOptions[0].value
+            const urlPath = `/api/fileReader?journal=${journal_no}`
+            fetch(urlPath, {method:'POST', body:JSON.stringify(tmClassArr.current)})
             .then(res => res.json())
             .then(data =>{
-                setSearchRes(prevState=> prevState.concat(data))
+                setSearchRes(data)
                 setLoading(false)
             })
             .catch(err =>{
@@ -38,7 +44,7 @@ const  App:FunctionComponent  = (props) =>  {
     )
     // FileUploader component only gives file as an argument instead  on an element
     const fileUpload =   async (xlsFile:File) => {
-        setSearchRes([])
+        setSearchRes(null)
         tmClassArr.current = []
         const file = read(await xlsFile.arrayBuffer())
     
@@ -90,18 +96,47 @@ const  App:FunctionComponent  = (props) =>  {
             <Container fluid="md" className="text-center mt-2">
                 <h3>Search Trademarks published in the weekly trademark gazette</h3>
                 <p>Please upload the excel file containing trademarks</p>
-                <div className="d-flex justify-content-center"><FileUploader handleChange={fileUpload}  name="excelFile"  types={['xls', ]} classes="drag-and-drop-box" maxSize="10"/></div>
+                <Row>
+                    <Col>        
+                        <div className="d-flex justify-content-center"><FileUploader handleChange={fileUpload}  name="excelFile"  types={['xls', ]} classes="drag-and-drop-box" maxSize="10"/></div>
+                    </Col>
+                    <Col>
+                    <div>
+                    <label htmlFor="journals">Select Journal:</label>
+                    <Form.Select id="journals" size="sm"  disabled={loading ? true : false} ref={journalRef}>
+                        {journals.map((journal, i) => {
+                            let journal_no = journal.journal_no
+                            return(
+                                <option value={journal_no} key={`${journal_no}_${i}`}>{journal_no}</option>
+                            )
+                        })}
+                        
+                    </Form.Select>
+                    <Button 
+                        onClick={() => searchRes ? 
+                              setLoading(true): null}
+                         size="sm" 
+                         variant="primary"
+                         disabled={ loading ? true : false}
+                         >{loading ? "Searching..."  : "Search"}</Button>
+                </div>        
+                    </Col>
+                </Row>
+                
                
             </Container>
-            
+            {loading ?  
+            <Container fluid="md" className="text-center mt-2">
+            <Spinner animation="border" />
+            </Container> : ''} 
             { !isTMFile ?
                 <div>
                     <p>The Excel file you uploaded does not have trademarks in it.</p>
                 </div>
             :''}
-            { searchRes.length > 0 ? 
+            { searchRes ? 
             <Container className="mt-5" fluid>
-            
+                
                 <Table striped bordered hover size="md" className="tm-table">
             <thead>
                 <tr>
@@ -154,18 +189,7 @@ const  App:FunctionComponent  = (props) =>  {
             
             </Container> : ''}
 
-            {loading ?  
-            <Container fluid="md" className="text-center mt-2">
-            <Spinner animation="border" />
-            </Container> : ''} 
-
-            {tmClassArr.current.length > 0 ? 
-             <Container  fluid="md" className="text-center mt-2">
-                <Button
-                 onClick={loading ? null : () => setLoading(true)}
-                 disabled={loading}
-                 >{loading ? 'loading...' : 'Search More'}</Button>
-            </Container> : ''}
+            
         </>
         
     )
