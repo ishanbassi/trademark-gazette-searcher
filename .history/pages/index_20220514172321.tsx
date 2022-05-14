@@ -39,8 +39,8 @@ const  App:FunctionComponent  = (props) =>  {
                 setLoading(false)
             })
            subListRef.current = {
-               start:subListRef.current.start + 500,
-               end:subListRef.current.end + 500
+               start:subListRef.current.start + 1000,
+               end:subListRef.current.end + 1000
            } 
         }
     },[loading]

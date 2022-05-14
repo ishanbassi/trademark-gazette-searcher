@@ -17,30 +17,30 @@ const  App:FunctionComponent  = (props) =>  {
 
     const tmClassArr = useRef([])
     const journalRef = useRef(null)
-    const subListRef = useRef({start:0 , end:500})
+    const subListRef = useRef({start:0 , end:1000})
     useEffect(() => {
         fetch('/api/fileReader', {method:'GET'})
         .then(res => res.json())
-        .then(data =>setJournals(data))
+        .then(data =>setJournals(prev => prev.concat(data)))
     }, [])
     useEffect( () => {
         
         if(loading) {
-            
+            setSearchRes(null)
             const journal_no = journalRef.current.selectedOptions[0].value
             const urlPath = `/api/fileReader?journal=${journal_no}`
             fetch(urlPath, {method:'POST', body:JSON.stringify(tmClassArr.current.slice(subListRef.current.start,subListRef.current.end))})
             .then(res => res.json())
             .then(data =>{
-                setSearchRes(prev => prev.concat(data))
+                setSearchRes(data)
                 setLoading(false)
             })
             .catch(err =>{
                 setLoading(false)
             })
            subListRef.current = {
-               start:subListRef.current.start + 500,
-               end:subListRef.current.end + 500
+               start:subListRef.current.start + 1000,
+               end:subListRef.current.end + 1000
            } 
         }
     },[loading]
@@ -48,7 +48,7 @@ const  App:FunctionComponent  = (props) =>  {
     )
     // FileUploader component only gives file as an argument instead  on an element
     const fileUpload =   async (xlsFile:File) => {
-        setSearchRes([])
+        setSearchRes(null)
         tmClassArr.current = []
         const file = read(await xlsFile.arrayBuffer())
     
@@ -107,7 +107,7 @@ const  App:FunctionComponent  = (props) =>  {
                     <Col>
                     <div>
                     <label htmlFor="journals">Select Journal:</label>
-                    <Form.Select id="journals" size="sm"  disabled={loading ? true : false} ref={journalRef} onChange={() => subListRef.current = {start:0 , end:500}}>
+                    <Form.Select id="journals" size="sm"  disabled={loading ? true : false} ref={journalRef} onChange={() => subListRef.current = {start:0 , end:1000}}>
                         {journals.map((journal, i) => {
                             let journal_no = journal.journal_no
                             return(

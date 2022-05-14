@@ -21,7 +21,7 @@ const  App:FunctionComponent  = (props) =>  {
     useEffect(() => {
         fetch('/api/fileReader', {method:'GET'})
         .then(res => res.json())
-        .then(data =>setJournals(data))
+        .then(data =>setJournals(prev => prev.concat(data)))
     }, [])
     useEffect( () => {
         
@@ -32,15 +32,15 @@ const  App:FunctionComponent  = (props) =>  {
             fetch(urlPath, {method:'POST', body:JSON.stringify(tmClassArr.current.slice(subListRef.current.start,subListRef.current.end))})
             .then(res => res.json())
             .then(data =>{
-                setSearchRes(prev => prev.concat(data))
+                setSearchRes(data)
                 setLoading(false)
             })
             .catch(err =>{
                 setLoading(false)
             })
            subListRef.current = {
-               start:subListRef.current.start + 500,
-               end:subListRef.current.end + 500
+               start:subListRef.current.start + 1000,
+               end:subListRef.current.end + 1000
            } 
         }
     },[loading]
@@ -48,7 +48,7 @@ const  App:FunctionComponent  = (props) =>  {
     )
     // FileUploader component only gives file as an argument instead  on an element
     const fileUpload =   async (xlsFile:File) => {
-        setSearchRes([])
+        setSearchRes(null)
         tmClassArr.current = []
         const file = read(await xlsFile.arrayBuffer())
     
