@@ -29,23 +29,25 @@ export async function phoneticSearch(keyword, table) {
 }
 
 // a function to perform exact match, phonetic search and containWords search
-export async  function fullTmSearch(tmArray:TmInterface[], table:string) {
+export async  function fullTmSearch(tmArray:TmInterface[], table:string, journal:number) {
     
     const searchResult = await Promise.all(tmArray.map(async tm => {
         const tmPhonetics = Metaphone.process(tm.trademark)
         
         const result: any[] = await db(table).select(['page_no', 'details', 'tm_class', 'trademark', 'journal_no', db.raw(`? as regTm`, tm.trademark)])
-        .where(function () {
+        .where('tm_class', parseInt(tm.tmClass) | 0)
+        .andWhere('journal_no', journal)
+        .andWhere(function () {
             this.where('trademark', tm.trademark)
-            .orWhereILike('trademark', `%${tm.trademark}%`)
+            .orWhereLike('trademark', `%${tm.trademark}%`)
             .orWhere('tm_phonetics', tmPhonetics)
             
         })
-        .andWhere('tm_class', parseInt(tm.tmClass) | 0)
+        
         
         return result
     }))
-    const orderedResult = searchResult.reduce((prevArr, currArr) => prevArr.concat(currArr)).sort((a,b)=> b.journal_no - a.journal_no)
+    const orderedResult = searchResult.reduce((prevArr, currArr) => prevArr.concat(currArr))
     
     return orderedResult
     
