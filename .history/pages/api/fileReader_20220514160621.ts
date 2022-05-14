@@ -9,7 +9,7 @@ interface QueryInterface{
 }
 export default async function handler(req:NextApiRequest, res:NextApiResponse) {
     const table = process.env.NODE_ENV == 'production' ? 'tm_details' : 'tm_detail'
-    
+    console.log(table )
     if(req.method === 'GET') {
         const journals  = await db(table)
         .distinct('journal_no')

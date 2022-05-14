@@ -28,7 +28,7 @@ const  App:FunctionComponent  = (props) =>  {
             setSearchRes(null)
             const journal_no = journalRef.current.selectedOptions[0].value
             const urlPath = `/api/fileReader?journal=${journal_no}`
-            fetch(urlPath, {method:'POST', body:JSON.stringify(tmClassArr.current.splice(0,1000))})
+            fetch(urlPath, {method:'POST', body:JSON.stringify(tmClassArr.current.splice(0,(tmClassArr.current.length/2) ))})
             .then(res => res.json())
             .then(data =>{
                 setSearchRes(data)
