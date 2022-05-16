@@ -10,14 +10,14 @@ interface TmSearchResInterface extends TmDataInterface{
 }
 
 const  App:FunctionComponent  = (props) =>  {
-    const [searchRes,   setSearchRes] = useState<TmSearchResInterface[]>([])
+    const [searchRes,   setSearchRes] = useState<TmSearchResInterface[]>()
     const [isTMFile , setIsTMFile] = useState(true)
     const [loading ,setLoading ] = useState(false)
     const [journals, setJournals] = useState([])
 
     const tmClassArr = useRef([])
     const journalRef = useRef(null)
-    const subListRef = useRef({start:0 , end:2000})
+    const subListRef = useRef({start:0 , end:1000})
     useEffect(() => {
         fetch('/api/fileReader', {method:'GET'})
         .then(res => res.json())
@@ -39,8 +39,8 @@ const  App:FunctionComponent  = (props) =>  {
                 setLoading(false)
             })
            subListRef.current = {
-               start:subListRef.current.start + 2000,
-               end:subListRef.current.end + 2000
+               start:subListRef.current.start + 1000,
+               end:subListRef.current.end + 1000
            } 
         }
     },[loading]
@@ -107,7 +107,7 @@ const  App:FunctionComponent  = (props) =>  {
                     <Col>
                     <div>
                     <label htmlFor="journals">Select Journal:</label>
-                    <Form.Select id="journals" size="sm"  disabled={loading ? true : false} ref={journalRef} onChange={() => subListRef.current = {start:0 , end:2000}}>
+                    <Form.Select id="journals" size="sm"  disabled={loading ? true : false} ref={journalRef} onChange={() => subListRef.current = {start:0 , end:1000}}>
                         {journals.map((journal, i) => {
                             let journal_no = journal.journal_no
                             return(
@@ -117,10 +117,8 @@ const  App:FunctionComponent  = (props) =>  {
                         
                     </Form.Select>
                     <Button 
-                        onClick={() =>{
-                         searchRes.length > 0 ? 
-                              (setLoading(true) ,setSearchRes([]))
-                              : null}}
+                        onClick={() => searchRes ? 
+                              setLoading(true): null}
                          size="sm" 
                          variant="primary"
                          disabled={ loading ? true : false}
@@ -187,9 +185,7 @@ const  App:FunctionComponent  = (props) =>  {
             </tbody>
             
             </Table > 
-            
-            </Container> : ''}
-            <Container className="mt-5 text-center pb-5" fluid>
+            <Container className="mt-5 text-center" fluid>
                 {loading ?  
                 <Container fluid="md" className="text-center mt-2">
                 <Spinner animation="border" />
@@ -202,6 +198,9 @@ const  App:FunctionComponent  = (props) =>  {
                 >{loading ? "Searching..." : "Search More"}
                 </Button> : ''}
             </Container>
+            
+            </Container> : ''}
+
             
         </>
         
