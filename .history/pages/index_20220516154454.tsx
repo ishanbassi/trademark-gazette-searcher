@@ -17,7 +17,7 @@ const  App:FunctionComponent  = (props) =>  {
 
     const tmClassArr = useRef([])
     const journalRef = useRef(null)
-    const subListRef = useRef({start:0 , end:2000})
+    const subListRef = useRef({start:0 , end:1000})
     useEffect(() => {
         fetch('/api/fileReader', {method:'GET'})
         .then(res => res.json())
@@ -39,8 +39,8 @@ const  App:FunctionComponent  = (props) =>  {
                 setLoading(false)
             })
            subListRef.current = {
-               start:subListRef.current.start + 2000,
-               end:subListRef.current.end + 2000
+               start:subListRef.current.start + 1000,
+               end:subListRef.current.end + 1000
            } 
         }
     },[loading]
@@ -107,7 +107,7 @@ const  App:FunctionComponent  = (props) =>  {
                     <Col>
                     <div>
                     <label htmlFor="journals">Select Journal:</label>
-                    <Form.Select id="journals" size="sm"  disabled={loading ? true : false} ref={journalRef} onChange={() => subListRef.current = {start:0 , end:2000}}>
+                    <Form.Select id="journals" size="sm"  disabled={loading ? true : false} ref={journalRef} onChange={() => subListRef.current = {start:0 , end:1000}}>
                         {journals.map((journal, i) => {
                             let journal_no = journal.journal_no
                             return(
@@ -118,7 +118,7 @@ const  App:FunctionComponent  = (props) =>  {
                     </Form.Select>
                     <Button 
                         onClick={() =>{
-                         searchRes.length > 0 ? 
+                         searchRes ? 
                               (setLoading(true) ,setSearchRes([]))
                               : null}}
                          size="sm" 
