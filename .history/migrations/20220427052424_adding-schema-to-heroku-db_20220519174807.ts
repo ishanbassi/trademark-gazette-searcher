@@ -11,7 +11,7 @@ export async function up(knex: Knex): Promise<void> {
         table.string('tm_phonetics').notNullable()
         table.integer('tm_class').notNullable()
         table.integer('journal_no').notNullable()
-        table.index(['tm_class', 'journal_no', 'trademark', 'tm_phonetics'], 'trademark-index')
+        
     })
 }
 
