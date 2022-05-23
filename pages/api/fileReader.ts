@@ -4,6 +4,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import { closeConnection, db } from "../../dbConnection";
 import { fullTmSearch , exactMatch, TmInterface} from "../../utilities/tmSearcher";
 const table = process.env.NODE_ENV == "production" ? "tm_details" : "tm_detail"
+
 export default async function handler(req:NextApiRequest, res:NextApiResponse) {
  
     if(req.method === 'GET') {
