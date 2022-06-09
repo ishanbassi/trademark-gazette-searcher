@@ -22,40 +22,38 @@ export function extractPdfText(filePath:string, options?:PDFExtractOptions) {
             } 
             
             data.pages.forEach((page, i) =>{
-                let trademark:string = '', details = '',
+                let trademark:string = '', details: string[] = [],
                 regExp = new RegExp(/Trade Marks Journal No:\s+(\d\d\d\d).+Class\s+(\d\d?)/),
-                isImgTm , journal_no , tm_class
-                
+                isImgTm 
+
                 page.content.forEach( (data,i) => {
                     // only trademarks are having height of 23.94
                     if (data.height >= 23 && data.height <= 24 && data.x >= 58 && data.x<= 59){
                          trademark += `${data.str.toUpperCase()}`
                         
                     }
-                    else if (regExp.test(data.str)) {
-                        [,journal_no, tm_class]  = data.str.match(regExp)
-                        isImgTm = true
-                    }
+                    
+                    
                     else{
-                        details += `${data.str} `
+                        details.push(data.str)
                     }
                 })
-                if (trademark || isImgTm) {
+                
                     
                     const tm_phonetics = Metaphone.process(trademark)
-                    
+                    const journalAndClass = details.splice(0,3).join('')
+                    // const[ ,journal,tmClass] = journalAndClass.match(/Trade Marks Journal No:\s+(\d\d\d\d).+Class\s+(\d\d?)/)
                     
                     content.push({
                         "page_no":page.pageInfo.num,
-                        journal_no,
+                        // "journal_no":parseInt(journal),
                         trademark,
-                        details,
-                        tm_class,
-                        tm_phonetics,
-                    
+                        details:details.join(' '),
+                        // tm_class:parseInt(tmClass),
+                        tm_phonetics
                     })
                     
-                }
+                
                    
             })
             resolve(content)
@@ -66,4 +64,4 @@ export function extractPdfText(filePath:string, options?:PDFExtractOptions) {
 
 
 
-
+extractPdfText('./pdfs/2053/1-8.pdf').then(res => console.log(res)).catch(err => console.log(err))

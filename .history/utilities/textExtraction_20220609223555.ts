@@ -34,7 +34,6 @@ export function extractPdfText(filePath:string, options?:PDFExtractOptions) {
                     }
                     else if (regExp.test(data.str)) {
                         [,journal_no, tm_class]  = data.str.match(regExp)
-                        isImgTm = true
                     }
                     else{
                         details += `${data.str} `

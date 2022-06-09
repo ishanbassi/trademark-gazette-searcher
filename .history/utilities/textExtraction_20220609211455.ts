@@ -24,7 +24,7 @@ export function extractPdfText(filePath:string, options?:PDFExtractOptions) {
             data.pages.forEach((page, i) =>{
                 let trademark:string = '', details = '',
                 regExp = new RegExp(/Trade Marks Journal No:\s+(\d\d\d\d).+Class\s+(\d\d?)/),
-                isImgTm , journal_no , tm_class
+                isImgTm 
                 
                 page.content.forEach( (data,i) => {
                     // only trademarks are having height of 23.94
@@ -33,26 +33,26 @@ export function extractPdfText(filePath:string, options?:PDFExtractOptions) {
                         
                     }
                     else if (regExp.test(data.str)) {
-                        [,journal_no, tm_class]  = data.str.match(regExp)
                         isImgTm = true
                     }
                     else{
-                        details += `${data.str} `
+                        details += data.str
                     }
                 })
                 if (trademark || isImgTm) {
                     
                     const tm_phonetics = Metaphone.process(trademark)
                     
+                    const[ ,journal,tmClass] = details.match(/Trade Marks Journal No:\s+(\d\d\d\d).+Class\s+(\d\d?)/)
                     
                     content.push({
                         "page_no":page.pageInfo.num,
-                        journal_no,
-                        trademark,
-                        details,
-                        tm_class,
-                        tm_phonetics,
                     
+                        trademark,
+                        details:details,
+                        journal,
+                        tm_phonetics,
+                        tmClass
                     })
                     
                 }
