@@ -1,6 +1,6 @@
 export{}
 require('dotenv').config()
-
+console.log(process.env.NODE_ENV)
 module.exports = {
     development:{
         client: 'pg',
@@ -19,7 +19,10 @@ module.exports = {
         port :process.env.PROD_PG_PORT ,
         user : process.env.PROD_PG_USER,
         password : process.env.PROD_PG_PASSWORD,
-        database : process.env.PROD_PG_DATABASE
+        database : process.env.PROD_PG_DATABASE,
+        ssl:{
+            required:true
+        }
         }
     }
     
