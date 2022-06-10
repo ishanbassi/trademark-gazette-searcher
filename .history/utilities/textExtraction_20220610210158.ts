@@ -49,11 +49,12 @@ export function extractPdfText(filePath:string, options?:PDFExtractOptions) {
                         
                     }
                     else if (regExp.test(data.str) || regExp2.test(data.str)  ) {
-                        // joining three  strings for journal and class matching
+                        // joining two strings for journal and class matching
                         let str = data.str.concat(page.content[i+1].str, page.content[i+2].str)
+                        console.log(str)
+                        isImgTm = true
                         let result  = str.match(regExp)
                         journal_no = result[1]  , tm_class = result[2]
-                        isImgTm = true
 
                     }
                     else{

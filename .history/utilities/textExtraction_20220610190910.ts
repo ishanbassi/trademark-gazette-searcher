@@ -37,9 +37,7 @@ export function extractPdfText(filePath:string, options?:PDFExtractOptions) {
             
             data.pages.forEach((page, i) =>{
                 let trademark:string = '', details = '',
-                regExp = new RegExp(/Trade Marks Journal No:\s+(\d{4}).+Class\s+(\d{1,2})/),
-
-                regExp2 = new RegExp(/Trade Marks Journal No:\s+\d/),
+                regExp = new RegExp(/Trade Marks Journal No:\s+(\d\d\d\d).+Class\s+(\d\d?)/),
                 isImgTm , journal_no , tm_class
                 
                 page.content.forEach( (data,i) => {
@@ -48,11 +46,8 @@ export function extractPdfText(filePath:string, options?:PDFExtractOptions) {
                          trademark += `${data.str.toUpperCase()}`
                         
                     }
-                    else if (regExp.test(data.str) || regExp2.test(data.str)  ) {
-                        // joining three  strings for journal and class matching
-                        let str = data.str.concat(page.content[i+1].str, page.content[i+2].str)
-                        let result  = str.match(regExp)
-                        journal_no = result[1]  , tm_class = result[2]
+                    else if (regExp.test(data.str)) {
+                        [,journal_no, tm_class]  = data.str.match(regExp)
                         isImgTm = true
 
                     }
