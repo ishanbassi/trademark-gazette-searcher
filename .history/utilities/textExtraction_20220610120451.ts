@@ -43,7 +43,7 @@ export function extractPdfText(filePath:string, options?:PDFExtractOptions) {
                 if (trademark || isImgTm) {
                     
                     const tm_phonetics = Metaphone.process(trademark)
-                    const [appNo] = details.match(/\d{7}/)
+                    const [,appNo] = details.match(/\d{7}/)
                     
                     content.push({
                         page_no:page.pageInfo.num,
