@@ -60,7 +60,7 @@ export function extractPdfText(filePath:string, options?:PDFExtractOptions) {
                     const [appNo] = details.match(/\d{7}/)
                     
                     if (parseInt(tm_class) == 99) {
-                        let tmClasses = [...details.matchAll(/Cl.(\d{1,2});/g)]
+                        let tmClasses = [...details.matchAll(/Cl.(\d){1,2};/g)]
                         tmClasses.forEach(tmClass => {
                             pushToContent(page.pageInfo.num,journal_no,trademark,details,tmClass[1],tm_phonetics,appNo)
                         })

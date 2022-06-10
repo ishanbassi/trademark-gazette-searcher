@@ -9,24 +9,10 @@ export interface TmDataInterface {
     trademark:string,
     details:string,
     tm_class:number,
-    tm_phonetics:string,
-    appNo:number
+    tm_phonetics:string
 }
 export function extractPdfText(filePath:string, options?:PDFExtractOptions) {
     const content = []
-    const pushToContent  = (page_no, journal_no, trademark, details, tm_class, tm_phonetics, appNo) => {
-        
-        content.push({
-            page_no,
-            journal_no:parseInt(journal_no),
-            trademark,
-            details,
-            tm_class:parseInt(tm_class),
-            tm_phonetics,
-            appNo:parseInt(appNo)
-        
-        })
-    }
     return new Promise<TmDataInterface[]>((resolve, reject) => {
         pdfExtract.extract(filePath,options,  (err, data) => {
             if(err){
@@ -49,25 +35,26 @@ export function extractPdfText(filePath:string, options?:PDFExtractOptions) {
                     else if (regExp.test(data.str)) {
                         [,journal_no, tm_class]  = data.str.match(regExp)
                         isImgTm = true
-
                     }
                     else{
-                        details += `${data.str} `
+                        details += `${data.str}: ${data.height} : ${data.fontName} `
                     }
                 })
                 if (trademark || isImgTm) {
+                    
                     const tm_phonetics = Metaphone.process(trademark)
                     const [appNo] = details.match(/\d{7}/)
                     
-                    if (parseInt(tm_class) == 99) {
-                        let tmClasses = [...details.matchAll(/Cl.(\d{1,2});/g)]
-                        tmClasses.forEach(tmClass => {
-                            pushToContent(page.pageInfo.num,journal_no,trademark,details,tmClass[1],tm_phonetics,appNo)
-                        })
-                    }else{
-                        pushToContent(page.pageInfo.num,journal_no,trademark,details,tm_class,tm_phonetics,appNo)
-                    }
+                    content.push({
+                        page_no:page.pageInfo.num,
+                        journal_no:parseInt(journal_no),
+                        trademark,
+                        details,
+                        tm_class:parseInt(tm_class),
+                        tm_phonetics,
+                        appNo:parseInt(appNo)
                     
+                    })
                     
                 }
                    
