@@ -13,7 +13,7 @@ export{}
 const pdfjsLib = require("pdfjs-dist/legacy/build/pdf.js");
 
 import { PNG } from "pngjs";
-
+import { getDocument } from "pdfjs-dist";
 jest.setTimeout(100000)
 import { promises , createWriteStream }from "fs";
 
@@ -45,7 +45,7 @@ test('extraction', async () => {
     
   })
   loadingTask.promise.then(async doc => {
-    
+    console.log(doc)
     let totalPages =  doc.numPages , pagePromises = []
     
       const loadPage  = async (pageNo) => {
@@ -93,7 +93,7 @@ test('extraction', async () => {
     for(let pageNo = 1; pageNo <= totalPages ; pageNo++) {
       pagePromises.push(loadPage(pageNo))
     }
-    Promise.all(pagePromises).then(async res => await promises.writeFile('pdf1.json', JSON.stringify(content) , {encoding:'utf8'}))
+    Promise.all(pagePromises).then(async res => await promises.writeFile('pdf2.json', JSON.stringify(content) , {encoding:'utf8'}))
     
   })
   

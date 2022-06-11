@@ -2,7 +2,7 @@ const pdfjsLib = require("pdfjs-dist/legacy/build/pdf.js");
 
 
 
-
+jest.setTimeout(100000)
 import { promises , createWriteStream }from "fs";
 
 import { Metaphone} from 'natural'
@@ -24,7 +24,7 @@ export interface TmDataInterface {
 export async function extractPdfText(pdfPath)  {
     const pushToContent  = (page_no, journal_no, trademark, details, tm_class, tm_phonetics, application_no) => {    
       content.push({
-          page_no:parseInt(page_no),
+          page_no,
           journal_no:parseInt(journal_no),
           trademark,
           details,
@@ -41,7 +41,7 @@ export async function extractPdfText(pdfPath)  {
       
       
     })
-    return new Promise<TmDataInterface[]>((resolve, reject) => {
+    return new Promise((res,rej) => {
         loadingTask.promise.then(async doc => {
       
             let totalPages =  doc.numPages , pagePromises = []
@@ -58,7 +58,7 @@ export async function extractPdfText(pdfPath)  {
                     trademark += `${data.str.toUpperCase()}`
                   }
                   else{
-                    details += `${data.str} `
+                    details += data.str
             
                   }
           
@@ -86,10 +86,10 @@ export async function extractPdfText(pdfPath)  {
             for(let pageNo = 1; pageNo <= totalPages ; pageNo++) {
               pagePromises.push(loadPage(pageNo))
             }
-            await Promise.all(pagePromises)
-            resolve(content)           
-        })
-    
+            res(await Promise.resolve(Promise.all(pagePromises)))
+            
+          })
+          
     })
     
   }

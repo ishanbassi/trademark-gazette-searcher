@@ -13,7 +13,6 @@ export async function seed(knex: Knex): Promise<void> {
     // Inserts seed entries
         
         for await (let   pdf of pdfIterator ) {
-            console.log(`==================================>   ${pdf}   <==================================`)
             const trademarks = await extractPdfText(pdf)
             
             if(trademarks.length > 0){
