@@ -13,7 +13,7 @@ export{}
 const pdfjsLib = require("pdfjs-dist/legacy/build/pdf.js");
 
 import { PNG } from "pngjs";
-
+import { getDocument } from "pdfjs-dist";
 jest.setTimeout(100000)
 import { promises , createWriteStream }from "fs";
 
@@ -21,8 +21,9 @@ import { Metaphone} from 'natural'
 import { PDFDocumentLoadingTask } from "pdfjs-dist";
 import {TextItem} from 'pdfjs-dist/types/src/display/api'
 
-
-
+console.log(pdfjsLib)
+pdfjsLib.disableTextLayer = true;
+pdfjsLib.disableWorker = true;
 test('extraction', async () => {
   const pushToContent  = (page_no, journal_no, trademark, details, tm_class, tm_phonetics, application_no) => {
         
@@ -38,14 +39,14 @@ test('extraction', async () => {
     })
 }
   const content = []  
-  const pdfPath = await promises.readFile('./pdfs/2042/journal 2042 42-99.pdf')
+  const pdfPath = await promises.readFile('./pdfs/2041/journal 2041 1-5.pdf')
   const loadingTask:PDFDocumentLoadingTask = await pdfjsLib.getDocument({
     data: pdfPath,
     
     
   })
   loadingTask.promise.then(async doc => {
-    
+    console.log(doc)
     let totalPages =  doc.numPages , pagePromises = []
     
       const loadPage  = async (pageNo) => {
@@ -93,7 +94,7 @@ test('extraction', async () => {
     for(let pageNo = 1; pageNo <= totalPages ; pageNo++) {
       pagePromises.push(loadPage(pageNo))
     }
-    Promise.all(pagePromises).then(async res => await promises.writeFile('pdf1.json', JSON.stringify(content) , {encoding:'utf8'}))
+    Promise.all(pagePromises).then(async res => await promises.writeFile('pdf2.json', JSON.stringify(content) , {encoding:'utf8'}))
     
   })
   

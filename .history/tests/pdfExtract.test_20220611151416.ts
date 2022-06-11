@@ -5,8 +5,7 @@ jest.setTimeout(100000)
 import { extractPdfText } from '../utilities/textExtraction'
 test('testing pdf extract' , async () => {
     const result  = await extractPdfText('./pdfs/2041/journal 2041 1-5.pdf')
-    console.log(result)
-    // await fsPromise.writeFile('pdf1.json', JSON.stringify(result) , {encoding:'utf8'})
+    await fsPromise.writeFile('pdf1.json', JSON.stringify(result) , {encoding:'utf8'})
     
     
 })

@@ -24,7 +24,7 @@ export interface TmDataInterface {
 export async function extractPdfText(pdfPath)  {
     const pushToContent  = (page_no, journal_no, trademark, details, tm_class, tm_phonetics, application_no) => {    
       content.push({
-          page_no:parseInt(page_no),
+          page_no,
           journal_no:parseInt(journal_no),
           trademark,
           details,
@@ -58,7 +58,7 @@ export async function extractPdfText(pdfPath)  {
                     trademark += `${data.str.toUpperCase()}`
                   }
                   else{
-                    details += `${data.str} `
+                    details += data.str
             
                   }
           
