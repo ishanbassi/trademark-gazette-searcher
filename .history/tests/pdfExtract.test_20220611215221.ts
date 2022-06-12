@@ -4,7 +4,7 @@ import path from 'path'
 jest.setTimeout(10000)
 import { extractPdfText } from '../utilities/textExtraction'
 test('testing pdf extract' , async () => {
-    const result  = await extractPdfText('./pdfs/2051/99 (including IR).pdf')
+    const result  = await extractPdfText('./pdfs/2046/1-4.pdf')
     fsPromise.writeFile('pdf1.json', JSON.stringify(result) , {encoding:"utf-8"})
     
     

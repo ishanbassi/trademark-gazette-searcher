@@ -58,17 +58,18 @@ export async function extractPdfText(pdfPath)  {
                     trademark += `${data.str.toUpperCase()}`
                   }
                   else{
-                    details += `${data.str} `
+                    details += JSON.stringify(data)
             
                   }
           
                 })
                 if (trademark || isImgTm ) {
                   const tm_phonetics = Metaphone.process(trademark)
-                  // adding a fallback values for below values
-                  const [,appNo] = details.match(/(\d{5,7})\s+\d\d\/\d\d\/\d\d\d\d/) || [,'0']
-                  const [,journal_no] = details.match(/Trade\s+Marks\s+Journal\s+No:\s+(\d{4})/) || [,'0']
-                  const [,tm_class] = details.match(/Class\s+(\d{1,2})/) || [,'0']
+                  console.log(details , trademark)
+                  const [,appNo] = details.match(/(\d{7})\s+\d\d\/\d\d\/\d\d\d\d/)
+                  
+                  const [,journal_no] = details.match(/Trade\s+Marks\s+Journal\s+No:\s+(\d{4})/)
+                  const [,tm_class] = details.match(/Class\s+(\d{1,2})/)
                   if (parseInt(tm_class) == 99) {
                       let tmClasses = [...details.matchAll(/Cl.(\d{1,2});/g)]
                       tmClasses.forEach(tmClass => {

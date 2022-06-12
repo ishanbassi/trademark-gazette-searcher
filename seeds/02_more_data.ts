@@ -7,7 +7,7 @@ import { pdfIterator } from "../utilities/dirIterator";
 export async function seed(knex: Knex): Promise<void> {
     // Deletes ALL existing entries
     const table = process.env.NODE_ENV == "production" ? "tm_details" : "tm_detail"
-    await knex(table).truncate(); 
+    
     
 
     // Inserts seed entries

@@ -65,10 +65,9 @@ export async function extractPdfText(pdfPath)  {
                 })
                 if (trademark || isImgTm ) {
                   const tm_phonetics = Metaphone.process(trademark)
-                  // adding a fallback values for below values
-                  const [,appNo] = details.match(/(\d{5,7})\s+\d\d\/\d\d\/\d\d\d\d/) || [,'0']
-                  const [,journal_no] = details.match(/Trade\s+Marks\s+Journal\s+No:\s+(\d{4})/) || [,'0']
-                  const [,tm_class] = details.match(/Class\s+(\d{1,2})/) || [,'0']
+                  const [appNo] = details.match(/\d{7}/)
+                  const [,journal_no] = details.match(/Trade Marks Journal No:\s+(\d{4})/)
+                  const [,tm_class] = details.match(/Class\s+(\d{1,2})/)
                   if (parseInt(tm_class) == 99) {
                       let tmClasses = [...details.matchAll(/Cl.(\d{1,2});/g)]
                       tmClasses.forEach(tmClass => {
@@ -86,7 +85,7 @@ export async function extractPdfText(pdfPath)  {
               
             for(let pageNo = 1; pageNo <= totalPages ; pageNo++) {
               pagePromises.push(loadPage(pageNo))
-              
+              console.log(content)
             }
             await Promise.all(pagePromises)
             resolve(content)           
