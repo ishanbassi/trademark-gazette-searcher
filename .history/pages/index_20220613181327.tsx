@@ -122,7 +122,7 @@ const  App:FunctionComponent  = (props) =>  {
                     <label htmlFor="tm-class">Select Class:</label>
                     <Form.Select id="tm-class" size="sm"  disabled={loading ? true : false} onChange={(e)=>  setTmClass(parseInt(e.target.value))} value={tmClass}>
                         {
-                            Array.from({length: 45}, (_, i) => i + 1).map((tmClass,i) => {
+                            Array.from({length: 10}, (_, i) => i + 1).map((tmClass,i) => {
                                 return (
                                     <option value={tmClass} key={`${tmClass}_${i}`}>{tmClass}</option>
                                 )
