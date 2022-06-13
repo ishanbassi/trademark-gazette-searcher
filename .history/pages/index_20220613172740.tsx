@@ -28,7 +28,7 @@ const  App:FunctionComponent  = (props) =>  {
         
         if(loading) {
             let tmsToSearch = tmClassArr.current.filter(tm => tm.tmClass === tmClass)
-            
+            console.log(tmsToSearch)
             const journal_no = journalRef.current.selectedOptions[0].value
             const urlPath = `/api/fileReader?journal=${journal_no}`
             fetch(urlPath, {method:'POST', body:JSON.stringify(tmsToSearch)})
