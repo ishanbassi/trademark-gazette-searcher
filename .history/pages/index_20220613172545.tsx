@@ -27,11 +27,10 @@ const  App:FunctionComponent  = (props) =>  {
     useEffect( () => {
         
         if(loading) {
-            let tmsToSearch = tmClassArr.current.filter(tm => tm.tmClass === tmClass)
-            
+            console.log(tmClass)
             const journal_no = journalRef.current.selectedOptions[0].value
             const urlPath = `/api/fileReader?journal=${journal_no}`
-            fetch(urlPath, {method:'POST', body:JSON.stringify(tmsToSearch)})
+            fetch(urlPath, {method:'POST', body:JSON.stringify(tmClassArr.current.filter(tm => tm.tmClass === tmClass))})
             .then(res => res.json())
             .then(data =>{
                 setSearchRes(prev => prev.concat(data))
