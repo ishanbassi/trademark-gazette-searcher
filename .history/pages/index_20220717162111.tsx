@@ -29,7 +29,7 @@ const  App:FunctionComponent  = (props) =>  {
         if(loading) {
             let tmsToSearch = tmClassArr.current.filter(tm => tm.tmClass === tmClass).map(tm => tm.trademark)
             
-            
+            console.log(tmsToSearch)
             const urlPath = `/api/fileReader?journal=${journalNo.current}&tmClass=${tmClass}`
             fetch(urlPath, {method:'POST', body:JSON.stringify(tmsToSearch)})
             .then(res => res.json())
@@ -90,7 +90,7 @@ const  App:FunctionComponent  = (props) =>  {
 
         }
         
-        if (tmClassArr.current.length > 0) setLoading(true)
+        
     }   
     
     return(
@@ -142,13 +142,7 @@ const  App:FunctionComponent  = (props) =>  {
                
             </Container>
             
-            <Container className="mt-5 text-center pb-5" fluid>
-                {loading ?  
-                <Container fluid="md" className="text-center mt-2">
-                <Spinner animation="border" />
-                </Container> : ''} 
-                
-            </Container>
+            
             { searchRes.length > 0 ? 
             <Container className="mt-5" fluid>
                 
@@ -201,7 +195,13 @@ const  App:FunctionComponent  = (props) =>  {
             </Table > 
             
             </Container> : ''}
-            
+            <Container className="mt-5 text-center pb-5" fluid>
+                {loading ?  
+                <Container fluid="md" className="text-center mt-2">
+                <Spinner animation="border" />
+                </Container> : ''} 
+                
+            </Container>
             
         </>
         

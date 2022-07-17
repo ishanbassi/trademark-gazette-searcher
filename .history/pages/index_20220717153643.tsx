@@ -49,7 +49,7 @@ const  App:FunctionComponent  = (props) =>  {
     
     // FileUploader component only gives file as an argument instead  on an element
     const fileUpload =   async (xlsFile:File) => {
-        
+        setSearchRes([])
         tmClassArr.current = []
         const file = read(await xlsFile.arrayBuffer())
     
@@ -90,12 +90,11 @@ const  App:FunctionComponent  = (props) =>  {
 
         }
         
-        if (tmClassArr.current.length > 0) setLoading(true)
+        if(tmClassArr.current.length > 0) setLoading(true)
     }   
     
     return(
         <>
-        
             <Head>
                 <title>Trademark Searcher</title>
             </Head>
@@ -133,7 +132,7 @@ const  App:FunctionComponent  = (props) =>  {
                         onClick={() =>setLoading(true) }
                          size="sm" 
                          variant="primary"
-                         disabled={   loading ||  tmClassArr.current.length == 0 ? true : false}
+                         disabled={ loading ? true : false}
                          >{loading ? "Searching..."  : "Search"}</Button>
                 </div>        
                     </Col>
@@ -142,13 +141,7 @@ const  App:FunctionComponent  = (props) =>  {
                
             </Container>
             
-            <Container className="mt-5 text-center pb-5" fluid>
-                {loading ?  
-                <Container fluid="md" className="text-center mt-2">
-                <Spinner animation="border" />
-                </Container> : ''} 
-                
-            </Container>
+            
             { searchRes.length > 0 ? 
             <Container className="mt-5" fluid>
                 
@@ -201,7 +194,13 @@ const  App:FunctionComponent  = (props) =>  {
             </Table > 
             
             </Container> : ''}
-            
+            <Container className="mt-5 text-center pb-5" fluid>
+                {loading ?  
+                <Container fluid="md" className="text-center mt-2">
+                <Spinner animation="border" />
+                </Container> : ''} 
+                
+            </Container>
             
         </>
         
