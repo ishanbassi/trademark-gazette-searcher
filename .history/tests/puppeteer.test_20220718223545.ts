@@ -3,11 +3,11 @@ jest.setTimeout(100000)
 jest.useFakeTimers()
 import fs from 'fs'
 import path from 'path'
-import nodeFetch from 'node-fetch'
+const fetch = require('node-fetch')
 
 import { createWorker , PSM} from 'tesseract.js';
 import FormData from "form-data";
- let azCaptchaKey = 'qrj6czmpvydyj9kbwmbxghpfzv2c8krn'
+ 
 test('testing puppeteer', async  () => {
     try{
         const browser = await puppeteer.launch(
@@ -43,9 +43,8 @@ test('testing puppeteer', async  () => {
         formData.append('key', 'qrj6czmpvydyj9kbwmbxghpfzv2c8krn')
         formData.append('file', fs.createReadStream('./tests/captcha.ashx.jpg'))
         
-        await nodeFetch(`http://azcaptcha.com/in.php?method=post&key=${azCaptchaKey}`,{
+        await fetch('http://azcaptcha.com/in.php',{
             method:'POST',
-              
             body:formData
             ,
             headers:{

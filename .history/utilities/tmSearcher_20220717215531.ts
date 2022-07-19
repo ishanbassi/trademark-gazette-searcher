@@ -39,9 +39,8 @@ export async  function fullTmSearch(tmArray:string[], table:string, journal:numb
         .andWhere('journal_no', journal)
         .andWhere(function () {
             this.where('trademark', tm)
-            .orWhere('tm_phonetics', tmPhonetics)
             .orWhereLike('trademark', `%${tm}%`)
-            
+            .orWhere('tm_phonetics', tmPhonetics)
             
         })
         
