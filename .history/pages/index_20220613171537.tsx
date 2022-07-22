@@ -11,41 +11,38 @@ interface TmSearchResInterface extends TmDataInterface{
 
 const  App:FunctionComponent  = (props) =>  {
     const [searchRes,   setSearchRes] = useState<TmSearchResInterface[]>([])
-    
+    const [isTMFile , setIsTMFile] = useState(true)
     const [loading ,setLoading ] = useState(false)
     const [journals, setJournals] = useState([])
-    
+    const [tmClasses , setTmClasses] = useState([])
     const [tmClass , setTmClass] = useState(1)
     const tmClassArr = useRef([])
-    const [journalNo,setJournalNo]   = useState<string>()
-    
+    const journalRef = useRef(null)
+    const subListRef = useRef({start:0 , end:1000})
     useEffect(() => {
         fetch('/api/fileReader', {method:'GET'})
         .then(res => res.json())
-        .then(data => (setJournals(data), setJournalNo(data[0].journal_no)))
+        .then(data =>setJournals(data))
     }, [])
     useEffect( () => {
         
-        if(loading && tmClassArr.current.length > 0) {
-            let tmsToSearch = tmClassArr.current.filter(tm => tm.tmClass === tmClass).map(tm => tm.trademark)
-            console.log(tmsToSearch)
+        if(loading) {
             
-            const urlPath = `/api/fileReader?journal=${journalNo}&tmClass=${tmClass}`
-            fetch(urlPath, {method:'POST', body:JSON.stringify(tmsToSearch)})
+            const journal_no = journalRef.current.selectedOptions[0].value
+            const urlPath = `/api/fileReader?journal=${journal_no}`
+            fetch(urlPath, {method:'POST', body:JSON.stringify(tmClassArr.current.filter(tm => tm.tmClass === tmClass))})
             .then(res => res.json())
             .then(data =>{
-                setSearchRes(data)
-                
+                setSearchRes(prev => prev.concat(data))
+                setLoading(false)
             })
             .catch(err =>{
-              console.log(err)
+                setLoading(false)
             })
-            .finally(() => setLoading(false))
-           
-        }else{
-            setTimeout(() =>setLoading(false)  , 1000)
-            
-            
+           subListRef.current = {
+               start:subListRef.current.start + 1000,
+               end:subListRef.current.end + 1000
+           } 
         }
     },[loading]
     
@@ -53,7 +50,7 @@ const  App:FunctionComponent  = (props) =>  {
     
     // FileUploader component only gives file as an argument instead  on an element
     const fileUpload =   async (xlsFile:File) => {
-        
+        setSearchRes([])
         tmClassArr.current = []
         const file = read(await xlsFile.arrayBuffer())
     
@@ -94,12 +91,11 @@ const  App:FunctionComponent  = (props) =>  {
 
         }
         
-        setLoading(true)
+        if(tmClassArr.current.length > 0) setLoading(true)
     }   
     
     return(
         <>
-        
             <Head>
                 <title>Trademark Searcher</title>
             </Head>
@@ -113,7 +109,7 @@ const  App:FunctionComponent  = (props) =>  {
                     <Col>
                     <div>
                     <label htmlFor="journals">Select Journal:</label>
-                    <Form.Select id="journals" size="sm"  disabled={loading ? true : false}  onChange={(e) => setJournalNo(e.target.value)} value={journalNo}>
+                    <Form.Select id="journals" size="sm"  disabled={loading ? true : false} ref={journalRef} onChange={(e) => subListRef.current = {start:0 , end:1000}}>
                         {journals.map((journal, i) => {
                             let journal_no = journal.journal_no
                             return(
@@ -125,7 +121,7 @@ const  App:FunctionComponent  = (props) =>  {
                     <label htmlFor="tm-class">Select Class:</label>
                     <Form.Select id="tm-class" size="sm"  disabled={loading ? true : false} onChange={(e)=>  setTmClass(parseInt(e.target.value))} value={tmClass}>
                         {
-                            Array.from({length: 45}, (_, i) => i + 1).map((tmClass,i) => {
+                            Array.from({length: 10}, (_, i) => i + 1).map((tmClass,i) => {
                                 return (
                                     <option value={tmClass} key={`${tmClass}_${i}`}>{tmClass}</option>
                                 )
@@ -134,10 +130,13 @@ const  App:FunctionComponent  = (props) =>  {
                     </Form.Select>
                     
                     <Button 
-                        onClick={() =>setLoading(true) }
+                        onClick={() =>{
+                         searchRes.length > 0 ? 
+                              (setLoading(true) ,setSearchRes([]))
+                              : null}}
                          size="sm" 
                          variant="primary"
-                         disabled={   loading ||  tmClassArr.current.length == 0 ? true : false}
+                         disabled={ loading ? true : false}
                          >{loading ? "Searching..."  : "Search"}</Button>
                 </div>        
                     </Col>
@@ -145,14 +144,12 @@ const  App:FunctionComponent  = (props) =>  {
                 
                
             </Container>
-            {loading ?  
-            <Container className="mt-5 text-center pb-5" fluid>
-                
-                <Container fluid="md" className="text-center mt-2">
-                <Spinner animation="border" />
-                </Container> 
-                
-            </Container> : ''}
+            
+            { !isTMFile ?
+                <div>
+                    <p>The Excel file you uploaded does not have trademarks in it.</p>
+                </div>
+            :''}
             { searchRes.length > 0 ? 
             <Container className="mt-5" fluid>
                 
@@ -204,17 +201,20 @@ const  App:FunctionComponent  = (props) =>  {
             
             </Table > 
             
-            </Container> :
-            ''
-            }
-            
-            {
-                !loading && searchRes.length == 0  && tmClassArr.current.length > 0 ?
-                <Container  className="text-center" fluid>
-                    <h4>No matching trademark found</h4>
-                </Container>
-                :''
-            }
+            </Container> : ''}
+            <Container className="mt-5 text-center pb-5" fluid>
+                {loading ?  
+                <Container fluid="md" className="text-center mt-2">
+                <Spinner animation="border" />
+                </Container> : ''} 
+                { subListRef.current.start < tmClassArr.current.length ? 
+                <Button
+                onClick={() => loading ? null : setLoading(true) }
+                disabled = {loading ?  true : false}
+
+                >{loading ? "Searching..." : "Search More"}
+                </Button> : ''}
+            </Container>
             
         </>
         

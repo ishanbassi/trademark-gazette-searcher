@@ -17,20 +17,20 @@ const  App:FunctionComponent  = (props) =>  {
     
     const [tmClass , setTmClass] = useState(1)
     const tmClassArr = useRef([])
-    const [journalNo,setJournalNo]   = useState<string>()
+    const journalNo   = useRef(null)
     
     useEffect(() => {
         fetch('/api/fileReader', {method:'GET'})
         .then(res => res.json())
-        .then(data => (setJournals(data), setJournalNo(data[0].journal_no)))
+        .then(data => (setJournals(data), journalNo.current = data[0].journal_no))
     }, [])
     useEffect( () => {
         
-        if(loading && tmClassArr.current.length > 0) {
+        if(loading) {
             let tmsToSearch = tmClassArr.current.filter(tm => tm.tmClass === tmClass).map(tm => tm.trademark)
-            console.log(tmsToSearch)
             
-            const urlPath = `/api/fileReader?journal=${journalNo}&tmClass=${tmClass}`
+            
+            const urlPath = `/api/fileReader?journal=${journalNo.current}&tmClass=${tmClass}`
             fetch(urlPath, {method:'POST', body:JSON.stringify(tmsToSearch)})
             .then(res => res.json())
             .then(data =>{
@@ -42,10 +42,6 @@ const  App:FunctionComponent  = (props) =>  {
             })
             .finally(() => setLoading(false))
            
-        }else{
-            setTimeout(() =>setLoading(false)  , 1000)
-            
-            
         }
     },[loading]
     
@@ -53,7 +49,7 @@ const  App:FunctionComponent  = (props) =>  {
     
     // FileUploader component only gives file as an argument instead  on an element
     const fileUpload =   async (xlsFile:File) => {
-        
+        setSearchRes([])
         tmClassArr.current = []
         const file = read(await xlsFile.arrayBuffer())
     
@@ -94,12 +90,11 @@ const  App:FunctionComponent  = (props) =>  {
 
         }
         
-        setLoading(true)
+        if(tmClassArr.current.length > 0) setLoading(true)
     }   
     
     return(
         <>
-        
             <Head>
                 <title>Trademark Searcher</title>
             </Head>
@@ -113,7 +108,7 @@ const  App:FunctionComponent  = (props) =>  {
                     <Col>
                     <div>
                     <label htmlFor="journals">Select Journal:</label>
-                    <Form.Select id="journals" size="sm"  disabled={loading ? true : false}  onChange={(e) => setJournalNo(e.target.value)} value={journalNo}>
+                    <Form.Select id="journals" size="sm"  disabled={loading ? true : false}  onChange={(e) => journalNo.current = e.target.value}>
                         {journals.map((journal, i) => {
                             let journal_no = journal.journal_no
                             return(
@@ -137,7 +132,7 @@ const  App:FunctionComponent  = (props) =>  {
                         onClick={() =>setLoading(true) }
                          size="sm" 
                          variant="primary"
-                         disabled={   loading ||  tmClassArr.current.length == 0 ? true : false}
+                         disabled={ loading ? true : false}
                          >{loading ? "Searching..."  : "Search"}</Button>
                 </div>        
                     </Col>
@@ -145,14 +140,8 @@ const  App:FunctionComponent  = (props) =>  {
                 
                
             </Container>
-            {loading ?  
-            <Container className="mt-5 text-center pb-5" fluid>
-                
-                <Container fluid="md" className="text-center mt-2">
-                <Spinner animation="border" />
-                </Container> 
-                
-            </Container> : ''}
+            
+            
             { searchRes.length > 0 ? 
             <Container className="mt-5" fluid>
                 
@@ -204,17 +193,14 @@ const  App:FunctionComponent  = (props) =>  {
             
             </Table > 
             
-            </Container> :
-            ''
-            }
-            
-            {
-                !loading && searchRes.length == 0  && tmClassArr.current.length > 0 ?
-                <Container  className="text-center" fluid>
-                    <h4>No matching trademark found</h4>
-                </Container>
-                :''
-            }
+            </Container> : ''}
+            <Container className="mt-5 text-center pb-5" fluid>
+                {loading ?  
+                <Container fluid="md" className="text-center mt-2">
+                <Spinner animation="border" />
+                </Container> : ''} 
+                
+            </Container>
             
         </>
         

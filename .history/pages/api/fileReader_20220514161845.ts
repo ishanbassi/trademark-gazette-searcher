@@ -1,11 +1,14 @@
 
-
+import knex from "knex";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { closeConnection, db } from "../../dbConnection";
 import { fullTmSearch , exactMatch, TmInterface} from "../../utilities/tmSearcher";
 
+interface QueryInterface{
+    [key: string]: string;
+}
 export default async function handler(req:NextApiRequest, res:NextApiResponse) {
-    const table = 'tm_details'
+    const table = process.env.NODE_ENV == 'production' ? 'tm_details' : 'tm_detail'
     
     if(req.method === 'GET') {
         const journals  = await db(table)
@@ -16,10 +19,10 @@ export default async function handler(req:NextApiRequest, res:NextApiResponse) {
     }
     if(req.method === 'POST') {
         
-        const tms:string[] = JSON.parse(req.body)
-        const {journal, tmClass}  = req.query
+        const tms:TmInterface[] = JSON.parse(req.body)
+        const {journal}  = req.query
         
-        const result =  await  fullTmSearch(tms, table, parseInt(journal as string), parseInt(tmClass as string))
+        const result =  await  fullTmSearch(tms, table, parseInt(journal as string))
         
         res.send(result)
     }

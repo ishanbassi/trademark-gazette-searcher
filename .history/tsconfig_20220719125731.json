@@ -24,7 +24,7 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx"
-, "knexfile.ts", "tests/puppeteer.test.mts"  ],
+, "knexfile.ts"  ],
   "exclude": [
     "node_modules",
     

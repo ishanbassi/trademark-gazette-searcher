@@ -18,7 +18,7 @@ export default async function handler(req:NextApiRequest, res:NextApiResponse) {
         
         const tms:string[] = JSON.parse(req.body)
         const {journal, tmClass}  = req.query
-        
+        console.log(journal , tmClass)
         const result =  await  fullTmSearch(tms, table, parseInt(journal as string), parseInt(tmClass as string))
         
         res.send(result)

@@ -17,7 +17,7 @@ const  App:FunctionComponent  = (props) =>  {
     
     const [tmClass , setTmClass] = useState(1)
     const tmClassArr = useRef([])
-    const [journalNo,setJournalNo]   = useState<string>()
+    const [journalNo,setJournalNo]   = useState()
     
     useEffect(() => {
         fetch('/api/fileReader', {method:'GET'})
@@ -26,7 +26,7 @@ const  App:FunctionComponent  = (props) =>  {
     }, [])
     useEffect( () => {
         
-        if(loading && tmClassArr.current.length > 0) {
+        if(loading) {
             let tmsToSearch = tmClassArr.current.filter(tm => tm.tmClass === tmClass).map(tm => tm.trademark)
             console.log(tmsToSearch)
             
@@ -42,10 +42,6 @@ const  App:FunctionComponent  = (props) =>  {
             })
             .finally(() => setLoading(false))
            
-        }else{
-            setTimeout(() =>setLoading(false)  , 1000)
-            
-            
         }
     },[loading]
     
@@ -94,7 +90,7 @@ const  App:FunctionComponent  = (props) =>  {
 
         }
         
-        setLoading(true)
+        if (tmClassArr.current.length > 0) setLoading(true)
     }   
     
     return(
@@ -145,14 +141,14 @@ const  App:FunctionComponent  = (props) =>  {
                 
                
             </Container>
-            {loading ?  
+            
             <Container className="mt-5 text-center pb-5" fluid>
-                
+                {loading ?  
                 <Container fluid="md" className="text-center mt-2">
                 <Spinner animation="border" />
-                </Container> 
+                </Container> : ''} 
                 
-            </Container> : ''}
+            </Container>
             { searchRes.length > 0 ? 
             <Container className="mt-5" fluid>
                 

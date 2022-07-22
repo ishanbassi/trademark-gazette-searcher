@@ -30,28 +30,20 @@ export async function phoneticSearch(keyword, table) {
 
 // a function to perform exact match, phonetic search and containWords search
 export async  function fullTmSearch(tmArray:string[], table:string, journal:number, tmClass:number) {
-    
-    const searchResult = await Promise.all(tmArray.map(async tm => {
-        const tmPhonetics = Metaphone.process(tm)
+    let tmPhonetics  = tmArray.map(tm => Metaphone.process(tm))
+
+    const result: any[] = await db(table).select(['page_no', 'details', 'tm_class', 'trademark', 'journal_no', 'tm_phonetics'])
+    .where('tm_class', tmClass)
+    .andWhere('journal_no', journal)
+    .andWhere(function () {
+        this.whereIn('trademark', tmArray)
+        // .orWhereLike('trademark', `%${tm.trademark}%`)
+        .orWhereIn('tm_phonetics', tmPhonetics)
         
-        const result: any[] = await db(table).select(['page_no', 'details', 'tm_class', 'trademark', 'journal_no', db.raw(`? as regTm`, tm)])
-        .where('tm_class', tmClass)
-        .andWhere('journal_no', journal)
-        .andWhere(function () {
-            this.where('trademark', tm)
-            .orWhere('tm_phonetics', tmPhonetics)
-            .orWhereLike('trademark', `%${tm}%`)
-            
-            
-        })
+    })
         
-        
-        return result
-    }))
-    const orderedResult = searchResult.reduce((prevArr, currArr) => prevArr.concat(currArr))
-    
-    return orderedResult
-    
+    return result
+
 }
 
 

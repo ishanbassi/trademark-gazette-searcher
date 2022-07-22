@@ -145,14 +145,14 @@ const  App:FunctionComponent  = (props) =>  {
                 
                
             </Container>
-            {loading ?  
+            
             <Container className="mt-5 text-center pb-5" fluid>
-                
+                {loading ?  
                 <Container fluid="md" className="text-center mt-2">
                 <Spinner animation="border" />
-                </Container> 
+                </Container> : ''} 
                 
-            </Container> : ''}
+            </Container>
             { searchRes.length > 0 ? 
             <Container className="mt-5" fluid>
                 

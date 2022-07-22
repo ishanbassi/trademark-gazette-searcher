@@ -3,9 +3,9 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { closeConnection, db } from "../../dbConnection";
 import { fullTmSearch , exactMatch, TmInterface} from "../../utilities/tmSearcher";
-
+const table = "tm_details"
 export default async function handler(req:NextApiRequest, res:NextApiResponse) {
-    const table = 'tm_details'
+    const table = process.env.NODE_ENV == 'production' ? 'tm_details' : 'tm_detail'
     
     if(req.method === 'GET') {
         const journals  = await db(table)

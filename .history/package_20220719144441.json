@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "a trademark searcher",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "dev": "next dev ",
     "build": "next build",
@@ -34,7 +35,7 @@
     "knex": "^1.0.4",
     "natural": "^5.1.13",
     "next": "^12.1.4",
-    "node-fetch": "^2.6.7",
+    "node-fetch": "^3.2.4",
     "pdf.js-extract": "^0.1.5",
     "pdfjs-dist": "^2.14.305",
     "pg": "^8.7.3",
