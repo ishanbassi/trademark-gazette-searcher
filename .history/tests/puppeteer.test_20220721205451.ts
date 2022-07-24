@@ -22,7 +22,7 @@ test('testing puppeteer', async  () => {
             const url = response.url();
             
             if (response.request().resourceType() === 'image' && url  == 'https://ipindiaonline.gov.in/eregister/captcha.ashx') {
-
+                console.log('hii')
                 response.buffer().then(file => {
                     const fileName = `${url.split('/').pop()}.jpg`;
                     const filePath = path.resolve(__dirname, fileName);
@@ -39,6 +39,12 @@ test('testing puppeteer', async  () => {
        
         await page.type('#applNumber', '234234')
         await browser.close()
+        const formData = new FormData()
+        formData.append('key' , azCaptchaKey)
+        formData.append('method', 'post')
+        formData.append('file', fs.createReadStream('./tests/captcha.ashx.jpg'))
+        
+        
         
         
     }

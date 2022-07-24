@@ -8,7 +8,12 @@ import nodeFetch from 'node-fetch'
 import { createWorker , PSM} from 'tesseract.js';
 import FormData from "form-data";
  let azCaptchaKey = 'qrj6czmpvydyj9kbwmbxghpfzv2c8krn'
+
+ let solver = require('azcaptcha')
+solver.setApiKey(azCaptchaKey)
+
 test('testing puppeteer', async  () => {
+    
     try{
         const browser = await puppeteer.launch(
             {
@@ -39,6 +44,12 @@ test('testing puppeteer', async  () => {
        
         await page.type('#applNumber', '234234')
         await browser.close()
+
+        solver.decodeUrl('https://github.com/AZcaptcha/azcaptcha.js', {pollingInterval: 10000}, function(err, result, invalid) {
+            console.log(result.text);
+        });
+        
+        
         
         
     }

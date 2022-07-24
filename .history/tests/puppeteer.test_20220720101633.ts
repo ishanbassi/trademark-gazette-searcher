@@ -39,6 +39,21 @@ test('testing puppeteer', async  () => {
        
         await page.type('#applNumber', '234234')
         await browser.close()
+        const formData = new FormData()
+
+        
+        await nodeFetch(`http://azcaptcha.com/in.php?method=post&key=${azCaptchaKey}`,{
+            method:'POST',
+              
+
+
+            headers:{
+                "Content-Type":"multipart/form-data"
+            }
+        },)
+        .then(res => res.json())
+        .then(data => console.log(data))
+        
         
         
     }

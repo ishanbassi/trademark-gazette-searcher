@@ -39,6 +39,14 @@ test('testing puppeteer', async  () => {
        
         await page.type('#applNumber', '234234')
         await browser.close()
+        const formData = new FormData()
+        formData.append('key' , azCaptchaKey)
+        formData.append('method', 'post')
+        formData.append('file', fs.createReadStream('./tests/captcha.ashx.jpg'))
+        formData.submit(`http://azcaptcha.com/in.php`, (err,res) => {
+            console.log(res.statusMessage)
+        })
+        
         
         
     }

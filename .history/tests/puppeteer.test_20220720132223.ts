@@ -4,11 +4,12 @@ jest.useFakeTimers()
 import fs from 'fs'
 import path from 'path'
 import nodeFetch from 'node-fetch'
-
+let decode = require('../utilities/captcha').decode
 import { createWorker , PSM} from 'tesseract.js';
 import FormData from "form-data";
  let azCaptchaKey = 'qrj6czmpvydyj9kbwmbxghpfzv2c8krn'
 test('testing puppeteer', async  () => {
+    
     try{
         const browser = await puppeteer.launch(
             {
@@ -39,6 +40,24 @@ test('testing puppeteer', async  () => {
        
         await page.type('#applNumber', '234234')
         await browser.close()
+        let captchaImg = fs.readFileSync('./tests/captcha.ashx.jpg')
+        let b64Img = Buffer.from(captchaImg).toString('base64')
+        const formData = new FormData()
+        formData.append('key', 'qrj6czmpvydyj9kbwmbxghpfzv2c8krn')
+        formData.append('file', fs.createReadStream('./tests/captcha.ashx.jpg'))
+        
+        await nodeFetch(`http://azcaptcha.com/in.php?method=base64&key=${azCaptchaKey}&file=${b64Img}`,{
+            method:'POST',
+              
+        
+            
+            headers:{
+                "Content-Type":"multipart/form-data"
+            }
+        },)
+        .then(res => res.json())
+        .then(data => console.log(data))
+        
         
         
     }

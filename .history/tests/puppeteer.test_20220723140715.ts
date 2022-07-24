@@ -18,19 +18,21 @@ test('testing puppeteer', async  () => {
             )
         const page = await browser.newPage()
         
-        page.on('response', async response => {
-            const url = response.url();
-            
-            if (response.request().resourceType() === 'image' && url  == 'https://ipindiaonline.gov.in/eregister/captcha.ashx') {
-
-                response.buffer().then(file => {
-                    const fileName = `${url.split('/').pop()}.jpg`;
-                    const filePath = path.resolve(__dirname, fileName);
-                    const writeStream = fs.createWriteStream(filePath);
-                    writeStream.write(file);
-                });
-            }
-        });
+        await new Promise((res, rej) => {
+            page.on('response', async response => {
+                const url = response.url();
+                
+                if (response.request().resourceType() === 'image' && url  == 'https://ipindiaonline.gov.in/eregister/captcha.ashx') {
+    
+                    response.buffer().then(file => {
+                        const fileName = `${url.split('/').pop()}.jpg`;
+                        const filePath = path.resolve(__dirname, fileName);
+                        const writeStream = fs.createWriteStream(filePath);
+                        writeStream.write(file);
+                    });
+                }
+            });
+        })
         await page.goto('https://ipindiaonline.gov.in/eregister/Application_View.aspx')
         await Promise.all([
             (await page.waitForSelector('#rdb_0')).click() ,
