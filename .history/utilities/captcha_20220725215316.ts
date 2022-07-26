@@ -6,18 +6,61 @@ import FormData from 'form-data'
 import fetch from 'node-fetch'
 let azCaptchaKey = 'qrj6czmpvydyj9kbwmbxghpfzv2c8krn'
 async function solveCaptcha() {
-        let flag:boolean
-        const browser = await puppeteer.launch({headless:false,})
+
+        let captchaText
+        const browser = await puppeteer.launch({headless:false, slowMo:200})
         const page = await browser.newPage()
 
-
         
+        
+        
+            // order matters because events have to be attached first 
+        // promise should not be awaited since it stops the function execution and following code does not run 
+        
+        captchaText  = new Promise((res, rej) => {
+            page.on('requestfinished', async resp => {
+                let response = resp.response()
+                
+                const url = response.url();
+          
+                if (response.request().resourceType() === 'image' && url  == 'https://ipindiaonline.gov.in/eregister/captcha.ashx') {
+                    await page.type('#applNumber' ,'23423')
+                    let data = await response.buffer()                        
+                    
+                    // res(await sendCaptcha(data))
+                    
+                    
+                        
+    
+                }
+                else if (response.request().resourceType() === 'image' && url.includes('https://ipindiaonline.gov.in/eregister/imagedoc.aspx')) {
+                    let data = await response.buffer()
+                    let stream = fs.createWriteStream('./image.jpg')
+                    stream.write(data)
+                }
+            })
+        })
         page.on('dialog', async dialog => {
             if (dialog.message().includes('Please enter image value.')) {
-                await dialog.accept()    
+                await dialog.accept()
 
+                
+                
+                console.log(await captchaText)
+                const applInput = await page.$('#applNumber');
+                await applInput.click({ clickCount: 3 })
+                await applInput.type("");
+
+                const captchaInput = await page.$('#captcha1');
+                await captchaInput.click({ clickCount: 3 })
+                await captchaInput.type("");
+                
+                // await fillCaptcha(page, captchaText)
+                
             }
         })
+
+        
 
         await page.goto('https://ipindiaonline.gov.in/eregister/Application_View.aspx')
         await Promise.all([
@@ -25,39 +68,12 @@ async function solveCaptcha() {
             page.waitForNavigation({waitUntil:"networkidle2"}),
         ]) 
         
-                  
-        const captchaResp = await page.waitForResponse(
-            response =>
-            response.request().resourceType() === 'image' && response.url()  === 'https://ipindiaonline.gov.in/eregister/captcha.ashx'
-          );
-        let captchaText = await sendCaptcha(await captchaResp.buffer())
-        await page.type('#applNumber', '4376740')
-        await page.type('#captcha1', captchaText)
-        await page.click('#btnView')
-            
-        const FailureResp = await page.waitForResponse(
-            response =>
-            response.request().resourceType() === 'image' && response.url()  === 'https://ipindiaonline.gov.in/eregister/captcha.ashx'
-          );
-          if(FailureResp.request().resourceType() === 'image' && FailureResp.url()  === 'https://ipindiaonline.gov.in/eregister/captcha.ashx') {
-              await browser.close()
-              return solveCaptcha()
-          }
-        await Promise.all([
-            page.waitForNavigation({waitUntil:"networkidle2"}),
-            (await page.waitForSelector('#SearchWMDatagrid_ctl03_lnkbtnappNumber1')).click() ,
-            
-        ]) 
-        
-        const tmImgResp = await page.waitForResponse(async response => {
-            return response.request().resourceType() === 'image' && response.url().includes('https://ipindiaonline.gov.in/eregister/imagedoc.aspx')
-        })
-
-        let  [td] = await page.$x("//td[text()='TM Applied For']")
-        let trademark = await page.evaluate((el:HTMLElement) => el.nextElementSibling.innerHTML, td)
-        console.log(trademark)    
+        await fillCaptcha(page,captchaText)
         await browser.close()
-}       
+        
+        
+
+}
 async function sendCaptcha(img:Buffer) {
     
     
@@ -116,9 +132,9 @@ async function getResult(captchaId:string) {
     
 }
 
-async function fillCaptcha(page:Page , captchaText:string) {
+async function fillCaptcha(page:Page , captchaText:Promise<string>) {
     await page.type('#applNumber', '4376740')
-    await page.type('#captcha1', captchaText)
+    await page.type('#captcha1', '1323')
     await page.click('#btnView')
     await Promise.all([
         (await page.waitForSelector('#SearchWMDatagrid_ctl03_lnkbtnappNumber1')).click() ,
@@ -129,14 +145,13 @@ async function fillCaptcha(page:Page , captchaText:string) {
         page.waitForNavigation({waitUntil:"networkidle2"}),
     ]) 
     
-    let  [td] = await page.$x("//td[text()='TM Applied For']")
+    let  [td] = await page.$x("//td[contains(.,'TM Applied For')]")
     
-    // let el1 = await page.evaluateHandle((el:HTMLElement) => el.previousElementSibling , td)
-    // let el2 = await page.evaluateHandle((el:HTMLElement) => el.parentElement , td)
-    // let el3 = await page.evaluateHandle((el:HTMLElement) => el.nextElementSibling , td)
-    // let el4 = await page.evaluateHandle((el:HTMLElement) => el.nextSibling , td)
-    // let el5 = await page.evaluateHandle((el:HTMLElement) => el.nextElementSibling , td)
-    // console.log(await el1.jsonValue(), await el2.jsonValue() , await el3.jsonValue(),await el4.jsonValue(),  await el5.jsonValue())
-    let html = await page.evaluate((el:HTMLElement) => el.innerHTML, td)
-    console.log(html)
+    let el1 = await page.evaluateHandle((el:HTMLElement) => el.previousElementSibling , td)
+    let el2 = await page.evaluateHandle((el:HTMLElement) => el.parentElement , td)
+    let el3 = await page.evaluateHandle((el:HTMLElement) => el.nextElementSibling , td)
+    let el4 = await page.evaluateHandle((el:HTMLElement) => el.nextSibling , td)
+    let el5 = await page.evaluateHandle((el:HTMLElement) => el.nextElementSibling , td)
+    console.log(await el1.jsonValue(), await el2.jsonValue() , await el3.jsonValue(),await el4.jsonValue(),  await el5.jsonValue())
+    
 }

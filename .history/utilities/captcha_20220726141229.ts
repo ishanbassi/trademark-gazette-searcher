@@ -6,16 +6,13 @@ import FormData from 'form-data'
 import fetch from 'node-fetch'
 let azCaptchaKey = 'qrj6czmpvydyj9kbwmbxghpfzv2c8krn'
 async function solveCaptcha() {
-        let flag:boolean
-        const browser = await puppeteer.launch({headless:false,})
+        
+        const browser = await puppeteer.launch({headless:false, slowMo:200})
         const page = await browser.newPage()
 
-
-        
         page.on('dialog', async dialog => {
             if (dialog.message().includes('Please enter image value.')) {
                 await dialog.accept()    
-
             }
         })
 
@@ -28,25 +25,15 @@ async function solveCaptcha() {
                   
         const captchaResp = await page.waitForResponse(
             response =>
-            response.request().resourceType() === 'image' && response.url()  === 'https://ipindiaonline.gov.in/eregister/captcha.ashx'
+            response.request().resourceType() === 'image' && response.url()  == 'https://ipindiaonline.gov.in/eregister/captcha.ashx'
           );
         let captchaText = await sendCaptcha(await captchaResp.buffer())
         await page.type('#applNumber', '4376740')
         await page.type('#captcha1', captchaText)
         await page.click('#btnView')
-            
-        const FailureResp = await page.waitForResponse(
-            response =>
-            response.request().resourceType() === 'image' && response.url()  === 'https://ipindiaonline.gov.in/eregister/captcha.ashx'
-          );
-          if(FailureResp.request().resourceType() === 'image' && FailureResp.url()  === 'https://ipindiaonline.gov.in/eregister/captcha.ashx') {
-              await browser.close()
-              return solveCaptcha()
-          }
         await Promise.all([
-            page.waitForNavigation({waitUntil:"networkidle2"}),
             (await page.waitForSelector('#SearchWMDatagrid_ctl03_lnkbtnappNumber1')).click() ,
-            
+            page.waitForNavigation({waitUntil:"networkidle2"}),
         ]) 
         
         const tmImgResp = await page.waitForResponse(async response => {
@@ -54,8 +41,8 @@ async function solveCaptcha() {
         })
 
         let  [td] = await page.$x("//td[text()='TM Applied For']")
-        let trademark = await page.evaluate((el:HTMLElement) => el.nextElementSibling.innerHTML, td)
-        console.log(trademark)    
+        let html = await page.evaluate((el:HTMLElement) => el.innerHTML, td)
+        console.log(html)    
         await browser.close()
 }       
 async function sendCaptcha(img:Buffer) {

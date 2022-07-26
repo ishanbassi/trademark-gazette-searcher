@@ -7,7 +7,7 @@ import fetch from 'node-fetch'
 let azCaptchaKey = 'qrj6czmpvydyj9kbwmbxghpfzv2c8krn'
 async function solveCaptcha() {
         let flag:boolean
-        const browser = await puppeteer.launch({headless:false,})
+        const browser = await puppeteer.launch({headless:false, slowMo:200})
         const page = await browser.newPage()
 
 
