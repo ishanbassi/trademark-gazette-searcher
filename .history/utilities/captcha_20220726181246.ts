@@ -6,7 +6,7 @@ import FormData from 'form-data'
 import fetch from 'node-fetch'
 let azCaptchaKey = 'qrj6czmpvydyj9kbwmbxghpfzv2c8krn'
 async function solveCaptcha() {
-         
+        let flag:boolean
         const browser = await puppeteer.launch({headless:false,})
         const page = await browser.newPage()
 
@@ -114,3 +114,27 @@ async function getResult(captchaId:string) {
     
 }
 
+async function fillCaptcha(page:Page , captchaText:string) {
+    await page.type('#applNumber', '4376740')
+    await page.type('#captcha1', captchaText)
+    await page.click('#btnView')
+    await Promise.all([
+        (await page.waitForSelector('#SearchWMDatagrid_ctl03_lnkbtnappNumber1')).click() ,
+        page.waitForNavigation({waitUntil:"networkidle2"}),
+    ]) 
+    await Promise.all([
+        page.waitForSelector('#panelgetdetail') ,
+        page.waitForNavigation({waitUntil:"networkidle2"}),
+    ]) 
+    
+    let  [td] = await page.$x("//td[text()='TM Applied For']")
+    
+    // let el1 = await page.evaluateHandle((el:HTMLElement) => el.previousElementSibling , td)
+    // let el2 = await page.evaluateHandle((el:HTMLElement) => el.parentElement , td)
+    // let el3 = await page.evaluateHandle((el:HTMLElement) => el.nextElementSibling , td)
+    // let el4 = await page.evaluateHandle((el:HTMLElement) => el.nextSibling , td)
+    // let el5 = await page.evaluateHandle((el:HTMLElement) => el.nextElementSibling , td)
+    // console.log(await el1.jsonValue(), await el2.jsonValue() , await el3.jsonValue(),await el4.jsonValue(),  await el5.jsonValue())
+    let html = await page.evaluate((el:HTMLElement) => el.innerHTML, td)
+    console.log(html)
+}
