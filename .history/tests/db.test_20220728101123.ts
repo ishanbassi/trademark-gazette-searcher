@@ -14,7 +14,7 @@ test('retreiving image from db' , async () => {
     let data = await db(table)
     .select('image')
     .where('application_no',5415189)
-    await promises.writeFile('tm.jpg',data[0].image)
+    await promises.writeFile('tm.jpg',data[0])
     await closeConnection()
     
 })

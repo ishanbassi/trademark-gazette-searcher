@@ -64,7 +64,7 @@ async function solveCaptcha(applNumber) {
         let trademark = await page.evaluate((el:HTMLElement) => el.nextElementSibling.innerHTML, td)
         await dataInsert(applNumber, trademark,binaryImg )
         await browser.close()
-        
+        console.log(`${applNumber} update done`)
         }
         catch(err){
             await browser.close()

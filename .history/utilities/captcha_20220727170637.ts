@@ -1,25 +1,24 @@
 export{solveCaptcha , sendCaptcha}
 import puppeteer, { Page } from "puppeteer";
 import fs from 'fs'
-
 import path from "path";
 import FormData from 'form-data'
 import fetch from 'node-fetch'
 import { dataInsert } from "./tmDataUpdate";
 let azCaptchaKey = 'qrj6czmpvydyj9kbwmbxghpfzv2c8krn'
-async function solveCaptcha(applNumber) {
+async function solveCaptcha() {
          
-        const browser = await puppeteer.launch({headless:true,})
+        const browser = await puppeteer.launch({headless:false,})
         const page = await browser.newPage()
-        try{
-                    
-            page.on('dialog', async dialog => {
-                if (dialog.message().includes('Please enter image value.')) {
-                    await dialog.accept()    
-    
-                }
-            })
-    
+
+
+        
+        page.on('dialog', async dialog => {
+            if (dialog.message().includes('Please enter image value.')) {
+                await dialog.accept()    
+
+            }
+        })
 
         await page.goto('https://ipindiaonline.gov.in/eregister/Application_View.aspx')
         await Promise.all([
@@ -27,15 +26,13 @@ async function solveCaptcha(applNumber) {
             page.waitForNavigation({waitUntil:"networkidle2"}),
         ]) 
         
-        
+                  
         const captchaResp = await page.waitForResponse(
-            response =>{
-          
-            return response.url()  === 'https://ipindiaonline.gov.in/eregister/captcha.ashx'
-            });
-          
+            response =>
+            response.request().resourceType() === 'image' && response.url()  === 'https://ipindiaonline.gov.in/eregister/captcha.ashx'
+          );
         let captchaText = await sendCaptcha(await captchaResp.buffer())
-        
+        let applNumber = '5415189'
         await page.type('#applNumber', applNumber)
         await page.type('#captcha1', captchaText)
         
@@ -49,28 +46,19 @@ async function solveCaptcha(applNumber) {
         
         if(!applNoElem) {
             await browser.close()
-            console.warn('captcha recognition failed , restarting the browser')
-            return solveCaptcha(applNumber)
+            console.warn('captcha recognition failed')
+            return solveCaptcha()
         }
         await applNoElem.click()
         const tmImgResp = await page.waitForResponse(async response => {
             return response.request().resourceType() === 'image' && response.url().includes('https://ipindiaonline.gov.in/eregister/imagedoc.aspx')
         })
-        let tmBuffer = await tmImgResp.buffer()
-        
-        let binaryImg  = '\\x' + tmBuffer.toString('hex')
+        let binaryImg  = (await tmImgResp.buffer()).toString()
 
         let  [td] = await page.$x("//td[text()='TM Applied For']")
         let trademark = await page.evaluate((el:HTMLElement) => el.nextElementSibling.innerHTML, td)
         await dataInsert(applNumber, trademark,binaryImg )
         await browser.close()
-        
-        }
-        catch(err){
-            await browser.close()
-            console.error(err)
-        }
-
 }       
 async function sendCaptcha(img:Buffer) {
     
