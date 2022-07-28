@@ -8,7 +8,7 @@ import fetch from 'node-fetch'
 import { dataInsert } from "./tmDataUpdate";
 let azCaptchaKey = 'qrj6czmpvydyj9kbwmbxghpfzv2c8krn'
 async function solveCaptcha(applNumber:string) {
-        
+        await new Promise(res => setTimeout(res, 2000))
         const browser = await puppeteer.launch({headless:true,})
         const page = await browser.newPage()
         try{

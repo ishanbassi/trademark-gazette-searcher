@@ -1,6 +1,6 @@
 import { Knex } from "knex"
 import { solveCaptcha } from "../utilities/captcha"
-import Bluebird from "bluebird"
+
 export async function seed(knex: Knex): Promise<void> {
     
     const table = process.env.NODE_ENV == "production" ? "tm_details" : "tm_detail"
@@ -10,11 +10,15 @@ export async function seed(knex: Knex): Promise<void> {
         
 
     })
-    await Bluebird.map(query, async (item) => {
-        let applNumber:number = item.application_no
-        return  solveCaptcha(applNumber.toString())
-    },{concurrency:5})
     
+    for(let entry of query) {
+        
+        let applNumber:number = entry.application_no
+        await solveCaptcha(applNumber.toString())
+        
+        
+    }
+        
         
             
            

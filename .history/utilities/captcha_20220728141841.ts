@@ -7,8 +7,8 @@ import FormData from 'form-data'
 import fetch from 'node-fetch'
 import { dataInsert } from "./tmDataUpdate";
 let azCaptchaKey = 'qrj6czmpvydyj9kbwmbxghpfzv2c8krn'
-async function solveCaptcha(applNumber:string) {
-        
+async function solveCaptcha(applNumber) {
+         
         const browser = await puppeteer.launch({headless:true,})
         const page = await browser.newPage()
         try{
@@ -21,16 +21,19 @@ async function solveCaptcha(applNumber:string) {
             })
     
 
-        await page.goto('https://ipindiaonline.gov.in/eregister/Application_View.aspx', {waitUntil:"domcontentloaded"})
-        
-        let [captchaResp] = await Promise.all([
-            page.waitForResponse('https://ipindiaonline.gov.in/eregister/captcha.ashx', {timeout:10000}),
+        await page.goto('https://ipindiaonline.gov.in/eregister/Application_View.aspx')
+        await Promise.all([
             (await page.waitForSelector('#rdb_0')).click() ,
             page.waitForNavigation({waitUntil:"networkidle2"}),
         ]) 
         
         
-        
+        const captchaResp = await page.waitForResponse(
+            response =>{
+          
+            return response.url()  === 'https://ipindiaonline.gov.in/eregister/captcha.ashx'
+            }, {timeout:5000});
+          
         let captchaText = await sendCaptcha(await captchaResp.buffer())
         
         await page.type('#applNumber', applNumber)
@@ -49,16 +52,12 @@ async function solveCaptcha(applNumber:string) {
             console.warn('captcha recognition failed , restarting the browser')
             return solveCaptcha(applNumber)
         }
-        let [tmImgResp] =  await Promise.all([
-            page.waitForResponse(async response => {
-                return response.request().resourceType() === 'image' && response.url().includes('https://ipindiaonline.gov.in/eregister/imagedoc.aspx')
-            }),
-            applNoElem.click(),
-            page.waitForNavigation({waitUntil:"domcontentloaded"})
-        ])
+        await applNoElem.click()
+        const tmImgResp = await page.waitForResponse(async response => {
+            return response.request().resourceType() === 'image' && response.url().includes('https://ipindiaonline.gov.in/eregister/imagedoc.aspx')
+        })
+        let tmBuffer = await tmImgResp.buffer()
         
-        // bytea data type supports data string in hex format
-        let tmBuffer = await tmImgResp.buffer()        
         let binaryImg  = '\\x' + tmBuffer.toString('hex')
 
         let  [td] = await page.$x("//td[text()='TM Applied For']")

@@ -15,7 +15,7 @@
     "knex:migrate:down": "knex migrate:down",
     "knex:migrate:up": "knex migrate:up",
     "knex:seed:make": "knex seed:make",
-    "ts-node":"ts-node"
+    "ts-node": "ts-node"
   },
   "keywords": [
     "trademark searcher",
@@ -24,10 +24,12 @@
   "author": "ISHAN BASSI",
   "license": "ISC",
   "dependencies": {
+    "@types/bluebird": "^3.5.36",
     "@types/node-fetch": "^2.6.2",
     "@types/pdf": "0.0.31",
     "@types/pdfjs-dist": "^2.10.378",
     "@types/pngjs": "^6.0.1",
+    "bluebird": "^3.7.2",
     "bootstrap": "^5.1.3",
     "dotenv": "^16.0.0",
     "fast-csv": "^4.3.6",

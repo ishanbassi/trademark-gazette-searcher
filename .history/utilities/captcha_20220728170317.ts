@@ -8,7 +8,7 @@ import fetch from 'node-fetch'
 import { dataInsert } from "./tmDataUpdate";
 let azCaptchaKey = 'qrj6czmpvydyj9kbwmbxghpfzv2c8krn'
 async function solveCaptcha(applNumber:string) {
-        
+         
         const browser = await puppeteer.launch({headless:true,})
         const page = await browser.newPage()
         try{
@@ -49,16 +49,12 @@ async function solveCaptcha(applNumber:string) {
             console.warn('captcha recognition failed , restarting the browser')
             return solveCaptcha(applNumber)
         }
-        let [tmImgResp] =  await Promise.all([
-            page.waitForResponse(async response => {
-                return response.request().resourceType() === 'image' && response.url().includes('https://ipindiaonline.gov.in/eregister/imagedoc.aspx')
-            }),
-            applNoElem.click(),
-            page.waitForNavigation({waitUntil:"domcontentloaded"})
-        ])
+        await applNoElem.click()
+        const tmImgResp = await page.waitForResponse(async response => {
+            return response.request().resourceType() === 'image' && response.url().includes('https://ipindiaonline.gov.in/eregister/imagedoc.aspx')
+        })
+        let tmBuffer = await tmImgResp.buffer()
         
-        // bytea data type supports data string in hex format
-        let tmBuffer = await tmImgResp.buffer()        
         let binaryImg  = '\\x' + tmBuffer.toString('hex')
 
         let  [td] = await page.$x("//td[text()='TM Applied For']")
