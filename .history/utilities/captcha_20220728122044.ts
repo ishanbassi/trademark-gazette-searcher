@@ -9,7 +9,7 @@ import { dataInsert } from "./tmDataUpdate";
 let azCaptchaKey = 'qrj6czmpvydyj9kbwmbxghpfzv2c8krn'
 async function solveCaptcha(applNumber) {
          
-        const browser = await puppeteer.launch({headless:true,})
+        const browser = await puppeteer.launch({headless:false,})
         const page = await browser.newPage()
         try{
                     
@@ -62,9 +62,8 @@ async function solveCaptcha(applNumber) {
 
         let  [td] = await page.$x("//td[text()='TM Applied For']")
         let trademark = await page.evaluate((el:HTMLElement) => el.nextElementSibling.innerHTML, td)
-        await dataInsert(applNumber, trademark.toUpperCase(),binaryImg )
+        await dataInsert(applNumber, trademark,binaryImg )
         await browser.close()
-        console.log(` update done for ${applNumber}`)
         
         }
         catch(err){
