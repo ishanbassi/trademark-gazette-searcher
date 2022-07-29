@@ -13,7 +13,7 @@ export async function seed(knex: Knex): Promise<void> {
     await Bluebird.map(query, async (item) => {
         let applNumber:number = item.application_no
         return  solveCaptcha(applNumber.toString())
-    },{concurrency:5}) // concurrency of 3 is good as it leads to less errors
+    },{concurrency:4}) // concurrency of 3 is good as it leads to less errors
     
         
             
