@@ -1,7 +1,6 @@
 import { GetServerSideProps} from "next"
 import {db} from '../dbConnection'
 import Head from 'next/head'
-import Image from "next/image"
 import { FunctionComponent, useEffect, useRef, useState } from "react"
 import {Table, Container, Spinner, Button, Form, Row, Col} from 'react-bootstrap'
 import {FileUploader} from 'react-drag-drop-files'
@@ -22,9 +21,9 @@ const  App  = ({journals}) =>  {
     const [journalNo,setJournalNo]   = useState<string>(journals[0].journal_no)
     
     const createURL = (imgBuffer) => {
-        
-        let imgsrc = "data:image/png;base64," + btoa(String.fromCharCode.apply(null, imgBuffer));
-        return imgsrc
+        console.log(imgBuffer)
+        let blob = new Blob(imgBuffer, {type:"image/jpeg"})
+        return URL.createObjectURL(blob)
     }
     useEffect( () => {
         
@@ -101,7 +100,7 @@ const  App  = ({journals}) =>  {
     
     return(
         <>
-        
+        {console.log(searchRes)}
             <Head>
                 <title>Trademark Searcher</title>
             </Head>
@@ -186,7 +185,7 @@ const  App  = ({journals}) =>  {
                             <td className="tm-col">
                                 <div>{tm.trademark}</div>
                                 {tm.image ? <div>
-                                    <Image src={createURL(tm.image.data)} width="500" height="400" />
+                                    <img src={createURL(tm.image.data)}></img>
                                 </div> : ''}
                                
                             </td>

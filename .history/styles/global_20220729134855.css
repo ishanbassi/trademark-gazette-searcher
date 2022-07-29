@@ -11,8 +11,8 @@
 
 
 .tm-table td>div {
-    overflow:auto;
-    height:8rem;
+    
+    height:5rem;
       
 }
 .drag-and-drop-box{

@@ -3,8 +3,7 @@
     text-align: center;  
 }
 .tm-table tr{
-    max-height:4rem; 
-    height: 4rem;
+    
     vertical-align: middle;
     font-weight: 600;    
 }
@@ -12,7 +11,7 @@
 
 .tm-table td>div {
     overflow:auto;
-    height:8rem;
+    height:5rem;
       
 }
 .drag-and-drop-box{

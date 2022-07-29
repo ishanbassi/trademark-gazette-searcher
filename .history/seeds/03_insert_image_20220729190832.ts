@@ -12,12 +12,10 @@ export async function seed(knex: Knex): Promise<void> {
     })
     let counter = 1
     await Bluebird.map(query, async (item) => {
-        
-        let applNumber:number = item.application_no
-        let result =  solveCaptcha(applNumber.toString())
         console.log(counter++)
-        return result
-    },{concurrency:10}) // concurrency of 3 is good as it leads to less errors
+        let applNumber:number = item.application_no
+        return  solveCaptcha(applNumber.toString())
+    },{concurrency:6}) // concurrency of 3 is good as it leads to less errors
     
         
             

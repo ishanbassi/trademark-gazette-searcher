@@ -18,7 +18,7 @@ export interface TmDataInterface {
     tm_class:number,
     tm_phonetics:string,
     appNo:number,
-    image?:any
+    image?:Buffer
 }
 
 

@@ -186,7 +186,7 @@ const  App  = ({journals}) =>  {
                             <td className="tm-col">
                                 <div>{tm.trademark}</div>
                                 {tm.image ? <div>
-                                    <Image src={createURL(tm.image.data)} width="500" height="400" />
+                                    <Image src={createURL(tm.image.data)} width="300" height="250" />
                                 </div> : ''}
                                
                             </td>

@@ -1,7 +1,6 @@
 import { GetServerSideProps} from "next"
 import {db} from '../dbConnection'
 import Head from 'next/head'
-import Image from "next/image"
 import { FunctionComponent, useEffect, useRef, useState } from "react"
 import {Table, Container, Spinner, Button, Form, Row, Col} from 'react-bootstrap'
 import {FileUploader} from 'react-drag-drop-files'
@@ -186,7 +185,7 @@ const  App  = ({journals}) =>  {
                             <td className="tm-col">
                                 <div>{tm.trademark}</div>
                                 {tm.image ? <div>
-                                    <Image src={createURL(tm.image.data)} width="500" height="400" />
+                                    <Image src={createURL(tm.image.data)}></Image>
                                 </div> : ''}
                                
                             </td>
