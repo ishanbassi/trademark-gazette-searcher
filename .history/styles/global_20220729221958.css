@@ -6,6 +6,8 @@
     vertical-align: middle;
 }
 
+
+
 .drag-and-drop-box{
     height:5rem !important;
     max-width:50rem;
@@ -16,5 +18,5 @@
     font-size:14px;
 }
 .tm-regTm-col , .tm-col {
-    font-size:18px;
+    font-size:20px;
 }

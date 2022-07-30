@@ -23,7 +23,7 @@ const  App  = ({journals}) =>  {
     
     const createURL = (imgBuffer) => {
         
-        let imgsrc = "data:image/png;base64," + window.btoa(String.fromCharCode.apply(null, imgBuffer))     ;
+        let imgsrc = "data:image/png;base64," + btoa(String.fromCharCode.apply(null, imgBuffer));
         return imgsrc
     }
     useEffect( () => {
@@ -170,10 +170,10 @@ const  App  = ({journals}) =>  {
                         
                         </th>
                     <th className="">Registered Trademark</th>
-                    <th className="">Details</th>
+                    <th className="">DETAILS</th>
                     <th className="">Page no</th>
                     <th className="">Journal</th>
-                    <th className="">Class</th>
+                    <th className="">CLASS</th>
                     
                 </tr>
             </thead>
@@ -184,29 +184,29 @@ const  App  = ({journals}) =>  {
                     return(
                         <tr key={`${tm.trademark}_${i+1}`}>
                             <td className="tm-no-col">
-                                <div>{i+1}</div>
+                                {i+1}
                             </td>
                             <td className="tm-col">
-                                <div><b>{tm.trademark}</b></div>
+                                <b>{tm.trademark}</b>
                                 {tm.image ? <div>
                                     <Image src={createURL(tm.image.data)} width="500" height="400" />
                                 </div> : ''}
                                
                             </td>
                             <td className="tm-regTm-col">
-                                <div><b>{tm.regtm}</b></div>
+                                <b>{tm.regtm}</b>
                             </td>
                             <td className="tm-details-col">
-                                <div><p>{tm.details}</p></div>
+                                <p>{tm.details}</p>
                             </td>
                             <td className="tm-pdf-page-col">
-                                <div>{tm.page_no}</div>
+                                {tm.page_no}
                             </td>
                             <td className="tm-journal-no">
-                                <div>{tm.journal_no}</div>
+                                {tm.journal_no}
                             </td>
                             <td className="tm-class-col">
-                                <div>{tm.tm_class}</div>
+                                {tm.tm_class}
                             </td>
     
                         </tr>

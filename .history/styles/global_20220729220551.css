@@ -3,9 +3,17 @@
     text-align: center;  
 }
 .tm-table tr{
+    ;
     vertical-align: middle;
+    
 }
 
+
+.tm-table td>div {
+    overflow:auto;
+    
+      
+}
 .drag-and-drop-box{
     height:5rem !important;
     max-width:50rem;
@@ -14,7 +22,4 @@
 .tm-details-col{
     font-family: 'Open Sans', sans-serif;
     font-size:14px;
-}
-.tm-regTm-col , .tm-col {
-    font-size:18px;
 }

@@ -23,7 +23,7 @@ const  App  = ({journals}) =>  {
     
     const createURL = (imgBuffer) => {
         
-        let imgsrc = "data:image/png;base64," + window.btoa(String.fromCharCode.apply(null, imgBuffer))     ;
+        let imgsrc = "data:image/png;base64," + btoa(String.fromCharCode.apply(null, imgBuffer));
         return imgsrc
     }
     useEffect( () => {
@@ -165,15 +165,15 @@ const  App  = ({journals}) =>  {
             <thead>
                 <tr>
                     <th className="tm-no-col">No.</th>
-                    <th className="">
+                    <th className="tm-col">
                         Published Trademark
                         
                         </th>
                     <th className="">Registered Trademark</th>
-                    <th className="">Details</th>
+                    <th className="">DETAILS</th>
                     <th className="">Page no</th>
                     <th className="">Journal</th>
-                    <th className="">Class</th>
+                    <th className="">CLASS</th>
                     
                 </tr>
             </thead>

@@ -170,10 +170,10 @@ const  App  = ({journals}) =>  {
                         
                         </th>
                     <th className="">Registered Trademark</th>
-                    <th className="">Details</th>
+                    <th className="">DETAILS</th>
                     <th className="">Page no</th>
                     <th className="">Journal</th>
-                    <th className="">Class</th>
+                    <th className="">CLASS</th>
                     
                 </tr>
             </thead>

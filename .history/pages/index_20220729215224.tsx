@@ -23,7 +23,7 @@ const  App  = ({journals}) =>  {
     
     const createURL = (imgBuffer) => {
         
-        let imgsrc = "data:image/png;base64," + window.btoa(String.fromCharCode.apply(null, imgBuffer))     ;
+        let imgsrc = "data:image/png;base64," + btoa(String.fromCharCode.apply(null, imgBuffer));
         return imgsrc
     }
     useEffect( () => {
@@ -104,9 +104,6 @@ const  App  = ({journals}) =>  {
         
             <Head>
                 <title>Trademark Searcher</title>
-                <link rel="preconnect" href="https://fonts.googleapis.com" />
-                <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-                <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet" /> 
             </Head>
             <Container fluid="md" className="text-center mt-2">
                 <h3>Search Trademarks published in the weekly trademark gazette</h3>
@@ -165,15 +162,15 @@ const  App  = ({journals}) =>  {
             <thead>
                 <tr>
                     <th className="tm-no-col">No.</th>
-                    <th className="">
+                    <th className="tm-col">
                         Published Trademark
                         
                         </th>
-                    <th className="">Registered Trademark</th>
-                    <th className="">Details</th>
-                    <th className="">Page no</th>
-                    <th className="">Journal</th>
-                    <th className="">Class</th>
+                    <th className="tm-regTm-col">Registered Trademark</th>
+                    <th className="tm-details-col">DETAILS</th>
+                    <th className="tm-pdf-page-col">Page no</th>
+                    <th className="tm-journal-no-col">Journal</th>
+                    <th className="tm-class-col">CLASS</th>
                     
                 </tr>
             </thead>
