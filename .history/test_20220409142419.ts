@@ -1,1 +1,0 @@
-export const   linda =  "natural.DoubleMetaphone";
