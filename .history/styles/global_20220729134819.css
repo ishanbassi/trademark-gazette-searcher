@@ -1,0 +1,21 @@
+.tm-table { 
+    width:100%;  
+    text-align: center;  
+}
+.tm-table tr{
+    
+    vertical-align: middle;
+    font-weight: 600;    
+}
+
+
+.tm-table td>div {
+    overflow:auto;
+    
+      
+}
+.drag-and-drop-box{
+    height:5rem !important;
+    max-width:50rem;
+    width: 50rem;
+}

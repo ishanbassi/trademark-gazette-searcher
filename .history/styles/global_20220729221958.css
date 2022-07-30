@@ -1,0 +1,22 @@
+.tm-table { 
+    width:100%;  
+    text-align: center;  
+}
+.tm-table tr{
+    vertical-align: middle;
+}
+
+
+
+.drag-and-drop-box{
+    height:5rem !important;
+    max-width:50rem;
+    width: 50rem;
+}
+.tm-details-col{
+    font-family: 'Open Sans', sans-serif;
+    font-size:14px;
+}
+.tm-regTm-col , .tm-col {
+    font-size:20px;
+}
