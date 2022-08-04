@@ -26,20 +26,37 @@ const  App  = ({journals}) =>  {
     useEffect( () => {
         
         if(loading && tmClassArr.current.length > 0) {
+            let watermark = 200
             let tmsToSearch = tmClassArr.current.filter(tm => tm.tmClass === tmClass).map(tm => tm.trademark)
             
             
             const urlPath = `/api/fileReader?journal=${journalNo}&tmClass=${tmClass}`
-            fetch(urlPath, {method:'POST', body:JSON.stringify(tmsToSearch)})
+            fetch(urlPath, {method:'POST', body:JSON.stringify(tmsToSearch.slice(0,watermark))})
             .then(res => res.json())
             .then(data =>{
-                setSearchRes(data)
+                setSearchRes(data);
+                (function fetchAgain() {
+                    if (tmsToSearch.length > watermark) {
+                        
+                        fetch(urlPath, {method:'POST', body:JSON.stringify(tmsToSearch.slice(watermark,watermark + 200))})
+                        .then(res => res.json())
+                        .then(data => setSearchRes(prevState => prevState.concat(data)))
+                        .finally( () => {
+                            watermark += 200
+                            fetchAgain()
+                        })
+                    }
+                    else{
+                        setLoading(false)
+                    }
+                })()
                 
             })
             .catch(err =>{
               console.log(err)
+              setLoading(false)
             })
-            .finally(() => setLoading(false))
+            
            
         }else{
             setTimeout(() =>setLoading(false)  , 1000)
@@ -147,14 +164,7 @@ const  App  = ({journals}) =>  {
                 
                
             </Container>
-            {loading ?  
-            <Container className="mt-5 text-center pb-5" fluid>
-                
-                <Container fluid="md" className="text-center mt-2">
-                <Spinner animation="border" />
-                </Container> 
-                
-            </Container> : ''}
+            
             { searchRes.length > 0 ? 
             <Container className="mt-5" fluid>
                 
@@ -217,7 +227,15 @@ const  App  = ({journals}) =>  {
             </Container> :
             ''
             }
-            
+            {loading ?  
+            <Container className="mt-5 text-center pb-5" fluid>
+                
+                <Container fluid="md" className="text-center mt-2">
+                <Spinner animation="border" />
+                <p>Searching...</p>
+                </Container> 
+                
+            </Container> : ''}
             {
                 !loading && searchRes.length == 0  && tmClassArr.current.length > 0 ?
                 <Container  className="text-center" fluid>
