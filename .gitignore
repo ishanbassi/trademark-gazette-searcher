@@ -3,5 +3,5 @@ node_modules
 pdfs
 .env
 tesseract_images
-testAsset
+testAssets
 .history

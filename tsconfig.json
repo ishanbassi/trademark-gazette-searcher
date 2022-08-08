@@ -4,7 +4,8 @@
     "lib": [
       "dom",
       "dom.iterable",
-      "esnext"
+      "esnext",
+      
     ],
     "allowJs": true,
     "skipLibCheck": true,
@@ -13,8 +14,8 @@
     "noEmit": true,
     "incremental": true,
     "esModuleInterop": true,
-    "module":"CommonJS",
-    "moduleResolution": "node",
+    "module":"es2020",
+    "moduleResolution": "Node",
     "resolveJsonModule": true,
     "isolatedModules": true,
     "jsx": "preserve",
@@ -24,7 +25,7 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx"
-, "knexfile.ts", "tests/puppeteer.test.mts"  ],
+, "knexfile.ts", "tests/puppeteer.test.mts", "utilities/imageCompressor.ts", "tests/imageCompression.test.ts"  ],
   "exclude": [
     "node_modules",
     

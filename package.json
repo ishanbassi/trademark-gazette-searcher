@@ -25,6 +25,8 @@
   "license": "ISC",
   "dependencies": {
     "@types/bluebird": "^3.5.36",
+    "@types/imagemin": "^8.0.0",
+    "@types/imagemin-jpegtran": "^5.0.1",
     "@types/node-fetch": "^2.6.2",
     "@types/pdf": "0.0.31",
     "@types/pdfjs-dist": "^2.10.378",
@@ -34,6 +36,9 @@
     "dotenv": "^16.0.0",
     "fast-csv": "^4.3.6",
     "form-data": "^4.0.0",
+    "imagemin": "^7.0.1",
+    "imagemin-jpegtran": "^7.0.0",
+    "imagemin-mozjpeg": "^9.0.0",
     "jimp": "^0.16.1",
     "knex": "^1.0.4",
     "natural": "^5.1.13",
