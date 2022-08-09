@@ -4,7 +4,7 @@ import { promises } from "fs"
 import imagemin from 'imagemin'
 
 
-export async function compressImg(imgBuffer) {
+export async function compressImg(imgBuffer:Buffer) {
     
     let compressBuffer  = await imagemin.buffer(imgBuffer, {
         plugins:[imageminJpegtran({

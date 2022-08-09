@@ -6,6 +6,7 @@ import path from "path";
 import FormData from 'form-data'
 import fetch from 'node-fetch'
 import { dataInsert } from "./tmDataUpdate";
+import { compressImg } from "./imageCompressor";
 let azCaptchaKey = 'qrj6czmpvydyj9kbwmbxghpfzv2c8krn'
 async function solveCaptcha(applNumber:string) {
     try{
@@ -13,8 +14,10 @@ async function solveCaptcha(applNumber:string) {
             
             headless: true,
             
+            
         });
             const page = await browser.newPage()
+            
             try{
                         
                 page.on('dialog', async dialog => {
@@ -62,12 +65,13 @@ async function solveCaptcha(applNumber:string) {
             ])
             
             // bytea data type supports data string in hex format
-            let tmBuffer = await tmImgResp.buffer()        
+            let tmBuffer =  await compressImg(await tmImgResp.buffer())
+
             let binaryImg  = '\\x' + tmBuffer.toString('hex')
-    
+            
             let  [td] = await page.$x("//td[text()='TM Applied For']")
             let trademark = await page.evaluate((el:HTMLElement) => el.nextElementSibling.innerHTML, td)
-            await dataInsert(applNumber, trademark.toUpperCase(),binaryImg )
+            await dataInsert(parseInt(applNumber), trademark.toUpperCase(),binaryImg )
             await browser.close()
             console.log(` update done for ${applNumber}`)
             
