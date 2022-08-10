@@ -1,6 +1,7 @@
 import { Knex } from "knex"
 import { solveCaptcha } from "../utilities/captcha"
 import Bluebird from "bluebird"
+
 let myArgs = process.argv.slice(2)
 
 export async function seed(knex: Knex): Promise<void> {
@@ -19,7 +20,7 @@ export async function seed(knex: Knex): Promise<void> {
         let result =  solveCaptcha(applNumber.toString())
         console.log(counter++)
         return result
-    },{concurrency:3}) // concurrency of 3 is good as it leads to less errors
+    },{concurrency:parseInt(myArgs[3])}) // concurrency of 3 is good as it leads to less errors
     
         
             

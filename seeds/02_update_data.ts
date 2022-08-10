@@ -3,7 +3,8 @@ import { extractPdfText } from "../utilities/textExtraction";
 import { promises as fsPromise } from "fs";
 import path from "path";
 import { pdfIterator } from "../utilities/dirIterator";
-pdfIterator.dir = './pdfs/2064'
+const myArgs = process.argv.slice(2)
+pdfIterator.dir = `./pdfs/${myArgs[2]}`
 export async function seed(knex: Knex): Promise<void> {
     // Deletes ALL existing entries
 

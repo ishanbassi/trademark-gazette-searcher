@@ -167,63 +167,7 @@ const  App  = ({journals}) =>  {
             
             { searchRes.length > 0 ? 
             <Container className="mt-5" fluid>
-                
-                <Table striped bordered hover size="md" className="tm-table">
-            <thead>
-                <tr>
-                    <th className="tm-no-col">No.</th>
-                    <th className="">
-                        Published Trademark
-                        
-                        </th>
-                    <th className="">Registered Trademark</th>
-                    <th className="">Details</th>
-                    <th className="">Page no</th>
-                    <th className="">Journal</th>
-                    <th className="">Class</th>
-                    
-                </tr>
-            </thead>
-            
-            <tbody>
-                {searchRes.map((tm, i) => {
-                    
-                    return(
-                        <tr key={`${tm.trademark}_${i+1}`}>
-                            <td className="tm-no-col">
-                                <div>{i+1}</div>
-                            </td>
-                            <td className="tm-col">
-                                <div><b>{tm.trademark}</b></div>
-                                {tm.image ? <div>
-                                    <Image src={createURL(tm.image.data)} width="500" height="400" />
-                                </div> : ''}
-                               
-                            </td>
-                            <td className="tm-regTm-col">
-                                <div><b>{tm.regtm}</b></div>
-                            </td>
-                            <td className="tm-details-col">
-                                <div><p>{tm.details}</p></div>
-                            </td>
-                            <td className="tm-pdf-page-col">
-                                <div>{tm.page_no}</div>
-                            </td>
-                            <td className="tm-journal-no">
-                                <div>{tm.journal_no}</div>
-                            </td>
-                            <td className="tm-class-col">
-                                <div>{tm.tm_class}</div>
-                            </td>
-    
-                        </tr>
-                    )
-                })}
-                
-            </tbody>
-            
-            </Table > 
-            
+                          
             </Container> :
             ''
             }
