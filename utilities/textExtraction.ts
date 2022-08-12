@@ -17,7 +17,7 @@ export interface TmDataInterface {
     details:string,
     tm_class:number,
     tm_phonetics:string,
-    appNo:number,
+    application_no:number,
     image?:any
 }
 

@@ -7,9 +7,10 @@ import {Table, Container, Spinner, Button, Form, Row, Col} from 'react-bootstrap
 import {FileUploader} from 'react-drag-drop-files'
 import { CellObject, read, WorkSheet } from "xlsx"
 import { TmDataInterface } from "../utilities/textExtraction"
-import {createURL} from '../utilities/imageGenerator'
+import {createURL, fileReaderAPI} from '../utilities/imageGenerator'
 interface TmSearchResInterface extends TmDataInterface{
     regtm :string
+
 }
 
 const  App  = ({journals}) =>  {
@@ -167,7 +168,83 @@ const  App  = ({journals}) =>  {
             
             { searchRes.length > 0 ? 
             <Container className="mt-5" fluid>
+                <ol>
+                  {searchRes.map((tm , i) => {
+                      return(
                           
+                          <li key={`${tm.trademark}_${i}`} className='m-3 mt-5'>
+                              <Row>
+                                {tm.image ? 
+                                  <Col md="4">
+                                    
+
+                                    <div>    
+                                        <Image src={createURL(tm.image.data)} height="200" width="200"></Image>
+                                    </div>
+                                    
+                                    </Col>:''}
+                                    <Col>
+                                        <Row className="srch-res-details">
+                                           <Col className="mt-3" md='4'>
+                                                <span>Matching Trademark:</span> 
+                                                <div className="res-tm">
+                                                        <b>{tm.trademark}</b>
+                                                </div>
+                                            </Col>
+                                            <Col className="mt-3" md='4'>
+                                                <span>Registered Trademark:</span>
+                                                <div className="res-tm">
+                                                    <b>{tm.regtm}</b>
+                                                </div>
+                                            </Col >
+                                            
+
+                                            <Col md='4' className="mt-3">
+                                                <span>Trademark Class: </span>
+                                                <div>
+                                                    <b>{tm.tm_class}</b>
+                                                </div>
+                                            </Col>
+                                            
+
+                                            <Col md='4' className="mt-3">
+                                                 <span>Published In:</span>
+                                                 <div>
+                                                 <b>Page No. {tm.page_no} of Journal No. {tm.journal_no}</b>
+                                                 </div>
+                                            </Col>
+                                            
+                                            
+                                            <Col md='4' className="mt-3">
+                                                <span>Application No. :</span> 
+                                                <div>
+                                                    <b>{tm.application_no}</b>
+                                                </div>
+                                            </Col>
+                                            <Col md='4' className="mt-3">
+                                                <span>Trademark Type</span>
+                                                <div>
+                                                    <b>{tm.image ? 'Image Mark' : 'Word Mark'}</b>
+                                                </div>
+                                            </Col>
+
+                                            
+                                        </Row>
+                                    
+                                  </Col>
+                                  <Col xs='12'>
+                                        <div className="mt-3 tm-details">
+                                      <b>Details:</b> {tm.details}
+                                        </div>
+                                  </Col>
+
+                              </Row>
+                              
+                              
+                          </li>    
+                      )
+                  })}        
+                </ol>
             </Container> :
             ''
             }

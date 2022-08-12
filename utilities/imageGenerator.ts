@@ -26,3 +26,17 @@ export const createURL = (imgBuffer) => {
     let imageSrc = 'data:' + mime + ';base64,' + base64;
     return imageSrc
 }
+export const fileReaderAPI = (imgBuffer) => {
+    let imgBlob = new Blob(imgBuffer, {type:'image/jpeg'})
+    let fileReader = new FileReader()
+    fileReader.readAsDataURL(imgBlob)
+    const image = new Image()
+    fileReader.onloadend = (event) => {
+        const content  = event.target.result as string
+    
+        image.src = content
+        
+        
+    }
+    return image
+}
