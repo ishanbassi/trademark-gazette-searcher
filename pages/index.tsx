@@ -168,7 +168,7 @@ const  App  = ({journals}) =>  {
             
             { searchRes.length > 0 ? 
             <Container className="mt-5" fluid>
-                <div className="text">See Journal entries: <a href={`/journal/${searchRes[0].journal_no}`} target="_blank" referrerPolicy="no-referrer">{searchRes[0].journal_no}</a></div>
+                <div className="text">See Journal entries: <a href={`/journal/${searchRes[0].journal_no}`} target="_blank" rel="noopener noreferrer">{searchRes[0].journal_no}</a></div>
                 <hr/>
                 <ol>
                   {searchRes.map((tm , i) => {
