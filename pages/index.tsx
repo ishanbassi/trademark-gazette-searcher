@@ -8,7 +8,7 @@ import {FileUploader} from 'react-drag-drop-files'
 import { CellObject, read, WorkSheet } from "xlsx"
 import { TmDataInterface } from "../utilities/textExtraction"
 import {createURL, fileReaderAPI} from '../utilities/imageGenerator'
-interface TmSearchResInterface extends TmDataInterface{
+export interface TmSearchResInterface extends TmDataInterface{
     regtm :string
 
 }
@@ -168,6 +168,8 @@ const  App  = ({journals}) =>  {
             
             { searchRes.length > 0 ? 
             <Container className="mt-5" fluid>
+                <div className="text">See Journal entries: <a href={`/journal/${searchRes[0].journal_no}`} target="_blank" referrerPolicy="no-referrer">{searchRes[0].journal_no}</a></div>
+                <hr/>
                 <ol>
                   {searchRes.map((tm , i) => {
                       return(
