@@ -176,12 +176,12 @@ const  App  = ({journals}) =>  {
                           
                           <li key={`${tm.trademark}_${i}`} className='m-3 mt-5'>
                               <Row>
-                                {tm.image ? 
+                              {tm.image || tm.img_url ? 
                                   <Col md="4">
-                                    
+                                      
 
                                     <div>    
-                                        <Image src={createURL(tm.image.data)} height="200" width="200"></Image>
+                                        <Image src={tm.image ? createURL(tm.image.data) : tm.img_url} height="200" width="200"></Image>
                                     </div>
                                     
                                     </Col>:''}
@@ -216,7 +216,12 @@ const  App  = ({journals}) =>  {
                                                  </div>
                                             </Col>
                                             
-                                            
+                                            <Col md='4' className="mt-3">
+                                                <span>Application date</span>
+                                                <div>
+                                                    <b>{tm.application_date}</b>
+                                                </div>
+                                            </Col>
                                             <Col md='4' className="mt-3">
                                                 <span>Application No. :</span> 
                                                 <div>
@@ -226,10 +231,61 @@ const  App  = ({journals}) =>  {
                                             <Col md='4' className="mt-3">
                                                 <span>Trademark Type</span>
                                                 <div>
-                                                    <b>{tm.image ? 'Image Mark' : 'Word Mark'}</b>
+                                                    <b>{tm.image || tm.img_url ? 'Image Mark' : 'Word Mark'}</b>
                                                 </div>
                                             </Col>
-
+                                            <Col md='4' className="mt-3">
+                                                <span>Proprietor Name</span>
+                                                <div>
+                                                    <b>{tm.proprietor_name}</b>
+                                                </div>
+                                            </Col>
+                                            <Col md='4' className="mt-3">
+                                                <span>Proprietor Address</span>
+                                                <div>
+                                                    <b>{tm.proprietor_address}</b>
+                                                </div>
+                                            </Col>
+                                            {tm.agent_name ? 
+                                                <Col md='4' className="mt-3">
+                                                    <span>Agent Name</span>
+                                                    <div>
+                                                        <b>{tm.agent_name}</b>
+                                                    </div>
+                                                </Col>
+                                            :''}
+                                            
+                                            {tm.agent_address ? 
+                                                <Col md='4' className="mt-3">
+                                                    <span>Agent Address</span>
+                                                    <div>
+                                                        <b>{tm.agent_address}</b>
+                                                    </div>
+                                                </Col>
+                                            :''}
+                                            <Col md='4' className="mt-3">
+                                                <span>Head Office</span>
+                                                <div>
+                                                    <b>{tm.head_office}</b>
+                                                </div>
+                                            </Col>
+                                            
+                                            {
+                                                tm.assoicated_trademaks ? 
+                                                <Col md='4' className="mt-3">
+                                                <span>Associated Trademarks</span>
+                                                <div>
+                                                    <b>{tm.associated_trademarks}</b>
+                                                </div>
+                                                </Col>
+                                                :''
+                                            }
+                                            <Col md='4' className="mt-3">
+                                                <span>Currently Using</span>
+                                                <div>
+                                                    <b>{tm.user_details}</b>
+                                                </div>
+                                            </Col>
                                             
                                         </Row>
                                     
@@ -241,12 +297,13 @@ const  App  = ({journals}) =>  {
                                   </Col>
 
                               </Row>
-                              
+                              <hr />
                               
                           </li>    
                       )
                   })}        
                 </ol>
+                
             </Container> :
             ''
             }

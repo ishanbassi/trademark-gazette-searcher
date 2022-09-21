@@ -34,7 +34,7 @@ export async  function fullTmSearch(tmArray:string[], table:string, journal:numb
     const searchResult = await Promise.all(tmArray.map(async tm => {
         const tmPhonetics = Metaphone.process(tm)
         
-        const result: any[] = await db(table).select(['page_no', 'details', 'tm_class', 'trademark', 'journal_no', 'image', 'application_no', db.raw(`? as regTm`, tm)])
+        const result: any[] = await db(table).select(['page_no', 'details', 'tm_class', 'trademark', 'journal_no', 'image', 'application_no', db.raw(`? as regTm`, tm), 'associated_trademarks', 'head_office', 'proprietor_name', 'proprietor_address', 'agent_name', 'agent_address' ,'user_details', 'application_date' ,'img_url'])
         .where('tm_class', tmClass)
         .andWhere('journal_no', journal)
         .andWhere(function () {
