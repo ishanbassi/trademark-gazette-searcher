@@ -271,7 +271,7 @@ const  App  = ({journals}) =>  {
                                             </Col>
                                             
                                             {
-                                                tm.assoicated_trademaks ? 
+                                                tm.associated_trademarks ? 
                                                 <Col md='4' className="mt-3">
                                                 <span>Associated Trademarks</span>
                                                 <div>
