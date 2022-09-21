@@ -27,7 +27,7 @@ const  App  = ({journals}) =>  {
     useEffect( () => {
         
         if(loading && tmClassArr.current.length > 0) {
-            let watermark = 200
+            let watermark = 100
             let tmsToSearch = tmClassArr.current.filter(tm => tm.tmClass === tmClass).map(tm => tm.trademark)
             
             
