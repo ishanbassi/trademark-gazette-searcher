@@ -1,5 +1,7 @@
 import knex  from "knex";
- 
-export const db =knex(require('./knexfile').production)
+
+const dbConfiguration = process.env.NODE_ENV == 'production' ? require('./knexfile').production : require('./knexfile').development;
+
+export const db =  knex(dbConfiguration); 
 
 export const closeConnection = () => db.destroy()
