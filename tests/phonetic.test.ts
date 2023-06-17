@@ -1,9 +1,11 @@
-import { DoubleMetaphone , Metaphone } from "natural";
+import { DoubleMetaphone , Metaphone , JaroWinklerDistance } from "natural";
+import { UnexpectedResponseException } from "pdfjs-dist";
 
 test('phonetics' , () => {
     
-    const a = Metaphone.process('BEAUVIA')
-    const b = Metaphone.process('BFY')
-    console.log(Metaphone.compare('BEAUVIA', 'BFY'))
+    const a = DoubleMetaphone.process("dixon world")
+    const b = DoubleMetaphone.process("dick sonx")
+    
+    console.log(a,b)
     
 })

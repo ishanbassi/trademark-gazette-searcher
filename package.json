@@ -14,7 +14,9 @@
     "knex:migrate:latest": "knex migrate:latest",
     "knex:migrate:down": "knex migrate:down",
     "knex:migrate:up": "knex migrate:up",
+    "knex:migrate:rollback":"knex migrate:rollback",
     "knex:seed:make": "knex seed:make",
+    
     "ts-node": "ts-node"
   },
   "keywords": [
@@ -55,6 +57,7 @@
     "react-bootstrap": "^2.2.2",
     "react-dom": "^18.0.0",
     "react-drag-drop-files": "^2.3.5",
+    "stopword": "^2.0.8",
     "tesseract.js": "^2.1.1",
     "xlsx": "^0.18.5"
   },
