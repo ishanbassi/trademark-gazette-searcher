@@ -6,8 +6,8 @@ import { extractPdfText } from '../utilities/textExtraction'
 import { argv } from 'process'
 
 test('testing pdf extract' , async () => {
-    const result  = await extractPdfText(argv[3])
-    fsPromise.writeFile('pdf.json', JSON.stringify(result) , {encoding:"utf-8"})
+    const result  = await extractPdfText(`./pdfs/${argv[3]}/${argv[4]}`)
+    fsPromise.writeFile('pdf.json', JSON.stringify(result,null,4) , {encoding:"utf-8"})
     
     
     

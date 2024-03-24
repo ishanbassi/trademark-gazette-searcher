@@ -2,18 +2,20 @@ import { Knex } from "knex";
 
 
 export async function up(knex: Knex): Promise<void> {
-    return knex.schema.createTable('regtm_phonetic', table => {
+    return knex.schema.createTable('trademarks_phonetic', table => {
         table.increments('phonetic_id', {primaryKey:true})
         table.integer('tm_id')
             .notNullable()
-            .references('tm_id')
-            .inTable('reg_tm')
+            .references('id')
+            .inTable('trademarks')
             .onDelete('CASCADE')
         table.string('sanitized_tm').notNullable()
         table.string('phonetic_pk').notNullable()
         table.string('phonetic_sk').notNullable()
+        table.integer('tm_class').notNullable()
+        table.integer('journal_no')
 
-        table.index(['phonetic_pk', 'phonetic_sk'], 'idx_reg_phonetic')
+        table.index(['journal_no','tm_class','phonetic_pk', 'phonetic_sk'], 'user-tm-phn-idx')
     })
 }
 

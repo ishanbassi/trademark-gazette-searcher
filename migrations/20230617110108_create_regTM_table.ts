@@ -2,46 +2,22 @@ import { Knex } from "knex";
 
 
 export async function up(knex: Knex): Promise<void> {
-    return knex.schema.createTable('reg_tm', table => {
-        table.increments('tm_id', {primaryKey:true})
+    return knex.schema.createTable('trademarks', table => {
+        table.increments().primary()
         table.string('trademark')
-
-        table.text('img_url')
-
-    
         table.text('details')
-
-        table.bigInteger('user_id')
-            .references('user_id')
-            .inTable('user')
-        
-        table.integer('agent_id')
-            .references('agent_id')
-            .inTable('agent')
-        
-        table.integer('proprietor_id')
-
-            .references('agent_id')
-            .inTable('agent')
-
-        table.integer('application_no')
-            
-            .references('application_no')
-            .inTable('tm_application')
-
-        table.integer('class')
-            .notNullable()
-            .references('class')
-            .inTable('tm_class')
-
-        table.integer('journal_no')
-            
-            .references('journal_no')
-            .inTable('journal')
-
-        
-
-        
+        table.integer("application_no")
+        table.date('application_date')
+        table.string('associated_tms')
+        table.string('proprietor_name')
+        table.text('proprietor_addresss')
+        table.string('agent_name')
+        table.text('agent_address')
+        table.string('head_office')
+            .checkIn(['MUMBAI', 'AHMEDABAD', 'DELHI', 'KOLKATA', 'CHENNAI'])
+        table.string('img_url')
+        table.string('usage')
+        table.index(['trademark'], 'user-tm-index')
 
     })
 }

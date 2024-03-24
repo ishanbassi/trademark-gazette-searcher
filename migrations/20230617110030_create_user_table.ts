@@ -6,7 +6,7 @@ export async function up(knex: Knex): Promise<void> {
         table.bigInteger('user_id', ).primary()
         table.string('email').unique().notNullable()
         table.string('password').notNullable()
-        table.date('create_on').defaultTo(knex.fn.now())
+        table.date('created_on').defaultTo(knex.fn.now())
     })
 }
 
